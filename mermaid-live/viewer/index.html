@@ -34,7 +34,8 @@
         background: var(--bg);
         color: var(--fg);
         font-family: ui-sans-serif, system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
-        min-height: 100vh;
+        height: 100vh;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
       }
@@ -45,10 +46,8 @@
         gap: 12px;
         padding: 14px 16px;
         border-bottom: 1px solid var(--line);
-        position: sticky;
-        top: 0;
         background: var(--bg);
-        z-index: 2;
+        flex: none;
       }
       h1 { font-size: 15px; margin: 0; letter-spacing: 0.02em; }
       .kind {
@@ -65,16 +64,26 @@
       .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
       .dot.live { background: var(--accent); }
       .dot.down { background: var(--error); }
-      main { flex: 1; display: grid; grid-template-columns: 1fr; }
+      main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr; }
       @media (min-width: 900px) { main.with-source { grid-template-columns: 1fr 320px; } }
       #canvas {
         padding: 24px 16px;
+        min-height: 0;
+        min-width: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         overflow: auto;
       }
-      #canvas svg { max-width: 100%; height: auto; }
+      /* 縦に長い図が切れないよう、枠に収まるまで縮める。
+         mermaid の svg は viewBox を持つので、高さを縛れば比率どおりに縮む。 */
+      #canvas svg {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+      }
       .empty { color: var(--muted); font-size: 14px; text-align: center; line-height: 1.8; }
       aside {
         border-top: 1px solid var(--line);
@@ -93,7 +102,7 @@
         word-break: break-word;
       }
       .err { color: var(--error); font-size: 12px; margin-top: 10px; white-space: pre-wrap; }
-      footer { padding: 8px 16px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); }
+      footer { padding: 8px 16px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); flex: none; }
     </style>
   </head>
   <body>
@@ -158,6 +167,13 @@
           const { svg } = await mermaid.render(`live-${seq}`, state.mermaid)
           if (seq !== renderSeq) return
           el('canvas').innerHTML = svg
+          // mermaid は svg に style="max-width: NNNpx" を付ける。
+          // それが残ると枠に合わせた縮小が効かないので外す。
+          const drawn = el('canvas').querySelector('svg')
+          if (drawn !== null) {
+            drawn.style.maxWidth = ''
+            drawn.removeAttribute('height')
+          }
           el('err').textContent = ''
           lastGood = state.mermaid
         } catch (error) {

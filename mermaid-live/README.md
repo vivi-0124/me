@@ -22,6 +22,18 @@ flowchart LR
   D --> H["入力欄の上の帯<br/>判定と確率を表示"]
 ```
 
+## 見た目
+
+応答が伸びるのに合わせて図が育つ。左が材料 2 本の途中（確率 0.78）、右が応答が終わった時点（0.91）。
+
+| 途中経過 | 確定 |
+|---|---|
+| ![途中経過のビューア](docs/viewer-partial.png) | ![確定したビューア](docs/viewer-sequence.png) |
+
+手順を説明した応答なら flowchart になる（種類を選んでいるのは Jev）。
+
+![flowchart のビューア](docs/viewer-flowchart.png)
+
 ## Jev に聞いていること
 
 1 往復で 4〜5 問まとめて評価する（Jev は並列に答える）。
