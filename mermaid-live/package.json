@@ -1,0 +1,14 @@
+{
+  "name": "mermaid-live",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Claude Mods + Jev で Claude の応答をリアルタイムに Mermaid 図解する",
+  "type": "module",
+  "scripts": {
+    "viewer": "node viewer/server.mjs",
+    "demo": "node tools/demo.ts",
+    "cost": "node tools/cost.ts",
+    "test": "node --test tests/*.test.ts"
+  },
+  "engines": { "node": ">=22.6" }
+}
