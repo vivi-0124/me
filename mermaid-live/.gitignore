@@ -1,0 +1,5 @@
+# /plugin-types が書き出す型定義。ビルドごとに再生成するのでコミットしない。
+.claude/types/
+
+# Mod とデモが書き出す図の置き場。
+.claude/mermaid-live/
