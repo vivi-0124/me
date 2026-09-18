@@ -90,3 +90,57 @@ test('HTTP エラーは JevError になる', async () => {
     (error: unknown) => error instanceof JevError && error.status === 401,
   )
 })
+
+test('キーが無いときは Authorization を送らない（自前の OpenJev 向け）', async () => {
+  let headers: Record<string, string> = {}
+  const fakeFetch: FetchLike = async (_url, init) => {
+    headers = (init?.headers ?? {}) as Record<string, string>
+    return { status: 200, ok: true, text: answersBody }
+  }
+
+  await evaluate({
+    fetch: fakeFetch,
+    state: {},
+    questions: buildQuestions(false),
+    baseUrl: 'http://127.0.0.1:8080/v1',
+  })
+
+  assert.equal('authorization' in headers, false)
+  assert.equal(headers['content-type'], 'application/json')
+})
+
+test('空白だけのキーも送らない', async () => {
+  let headers: Record<string, string> = {}
+  const fakeFetch: FetchLike = async (_url, init) => {
+    headers = (init?.headers ?? {}) as Record<string, string>
+    return { status: 200, ok: true, text: answersBody }
+  }
+
+  await evaluate({ fetch: fakeFetch, apiKey: '   ', state: {}, questions: buildQuestions(false) })
+  assert.equal('authorization' in headers, false)
+})
+
+test('baseUrl を差し替えると そこの /systemone を叩く', async () => {
+  let seenUrl = ''
+  const fakeFetch: FetchLike = async (url) => {
+    seenUrl = url
+    return { status: 200, ok: true, text: answersBody }
+  }
+
+  await evaluate({
+    fetch: fakeFetch,
+    state: {},
+    questions: buildQuestions(false),
+    // 末尾のスラッシュは落ちる。
+    baseUrl: 'http://127.0.0.1:8080/v1/',
+  })
+  assert.equal(seenUrl, 'http://127.0.0.1:8080/v1/systemone')
+})
+
+test('529（混雑）は読める文言の JevError になる', async () => {
+  const fakeFetch: FetchLike = async () => ({ status: 529, ok: false, text: 'overloaded' })
+  await assert.rejects(
+    () => evaluate({ fetch: fakeFetch, apiKey: 'x', state: {}, questions: buildQuestions(false) }),
+    (error: unknown) => error instanceof JevError && error.status === 529 && /混雑/.test(error.message),
+  )
+})

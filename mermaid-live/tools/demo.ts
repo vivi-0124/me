@@ -52,6 +52,8 @@ async function main(): Promise<void> {
     MERMAID_LIVE_API_KEY: process.env.MERMAID_LIVE_API_KEY,
     TYPESAFE_API_KEY: process.env.TYPESAFE_API_KEY,
     TYPESAFE_AI_API_KEY: process.env.TYPESAFE_AI_API_KEY,
+    MERMAID_LIVE_BASE_URL: process.env.MERMAID_LIVE_BASE_URL,
+    MERMAID_LIVE_MODEL: process.env.MERMAID_LIVE_MODEL,
     MERMAID_LIVE_DIR: process.env.MERMAID_LIVE_DIR,
     MERMAID_LIVE_MIN_GROWTH: process.env.MERMAID_LIVE_MIN_GROWTH ?? '80',
     MERMAID_LIVE_MIN_INTERVAL_MS: process.env.MERMAID_LIVE_MIN_INTERVAL_MS ?? '0',
@@ -59,7 +61,9 @@ async function main(): Promise<void> {
 
   const dir = resolve(process.cwd(), config.dir)
   await mkdir(dir, { recursive: true })
-  console.log(`mermaid-live demo: ${dir} に書き出します (Jev: ${config.apiKey === null ? '無効' : '有効'})`)
+  console.log(
+    `mermaid-live demo: ${dir} に書き出します (判定: ${config.enabled ? `${config.provider} @ ${config.baseUrl}` : '無効 — 規則ベース'})`,
+  )
 
   const buffer = new TurnBuffer(config.policy)
   let previous: string | null = null
@@ -79,7 +83,7 @@ async function main(): Promise<void> {
     const outline = extract(text)
 
     let decision: Decision
-    if (config.apiKey === null) {
+    if (!config.enabled) {
       decision = decideWithoutJev(outline, previous !== null)
     } else {
       const result = await evaluate({
@@ -118,7 +122,8 @@ async function main(): Promise<void> {
           direction: decision.direction,
           confidence: decision.confidence,
           reason: final ? '応答が終わりました（確定）' : '応答の途中経過です',
-          jev: config.apiKey !== null,
+          jev: config.enabled,
+          provider: config.provider,
           final,
           mermaid,
         },

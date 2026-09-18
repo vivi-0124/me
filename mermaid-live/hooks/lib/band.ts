@@ -7,6 +7,7 @@
  */
 
 import type { DiagramKind } from './mermaid.ts'
+import type { Provider } from './config.ts'
 
 export type Phase = 'idle' | 'thinking' | 'drawn' | 'held' | 'error'
 
@@ -19,6 +20,8 @@ export type BandStatus = {
   file: string | null
   viewerUrl: string | null
   jevEnabled: boolean
+  /** どの System One 実装を向いているか。 */
+  provider: Provider
   tokens: number | null
 }
 
@@ -31,6 +34,7 @@ export const IDLE_STATUS: BandStatus = {
   file: null,
   viewerUrl: null,
   jevEnabled: false,
+  provider: 'jev',
   tokens: null,
 }
 
@@ -105,10 +109,12 @@ export function bandTree<R>(
     Text({ dimColor: true, children: [confidenceBar(status.confidence)] }),
   ]
 
-  if (!status.jevEnabled) {
-    header.push(Text({ dimColor: true, children: ['  '] }))
-    header.push(Text({ color: 'yellow', children: ['Jev 無効'] }))
-  }
+  header.push(Text({ dimColor: true, children: ['  '] }))
+  header.push(
+    status.jevEnabled
+      ? Text({ dimColor: true, children: [status.provider] })
+      : Text({ color: 'yellow', children: ['判定なし（規則ベース）'] }),
+  )
 
   const rows: R[] = [Box({ flexDirection: 'row', children: header })]
   rows.push(Text({ dimColor: true, wrap: 'truncate-end', children: [status.reason] }))

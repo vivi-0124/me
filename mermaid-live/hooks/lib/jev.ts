@@ -143,7 +143,11 @@ export function parseResult(body: string, status: number): JevResult {
 
 export type EvaluateOptions = {
   fetch: FetchLike
-  apiKey: string
+  /**
+   * Bearer トークン。自前で立てた OpenJev のように認証を要求しないサーバでは
+   * null / undefined でよく、そのとき Authorization ヘッダ自体を送らない。
+   */
+  apiKey?: string | null
   state: unknown
   questions: JevQuestions
   model?: string
@@ -160,15 +164,16 @@ export async function evaluate(options: EvaluateOptions): Promise<JevResult> {
     questions: options.questions,
   })
 
-  const response = await options.fetch(url, {
-    method: 'POST',
-    headers: {
-      authorization: `Bearer ${options.apiKey}`,
-      'content-type': 'application/json',
-    },
-    body,
-  })
+  const headers: Record<string, string> = { 'content-type': 'application/json' }
+  const apiKey = options.apiKey?.trim()
+  if (apiKey !== undefined && apiKey.length > 0) headers.authorization = `Bearer ${apiKey}`
 
-  if (!response.ok) throw new JevError(errorMessage(response.text, response.status), response.status)
+  const response = await options.fetch(url, { method: 'POST', headers, body })
+
+  if (!response.ok) {
+    // 529 は本家も OpenJev も「今は詰まっている」の意味。次のチャンクで聞き直せばよい。
+    if (response.status === 529) throw new JevError('サーバが混雑しています (529)', 529)
+    throw new JevError(errorMessage(response.text, response.status), response.status)
+  }
   return parseResult(response.text, response.status)
 }
