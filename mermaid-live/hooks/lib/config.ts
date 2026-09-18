@@ -25,8 +25,20 @@ export const ENV_KEYS = [
 
 export type EnvBag = Partial<Record<(typeof ENV_KEYS)[number], string | undefined>>
 
+/** どの System One 実装を向いているか。帯とログの表示にだけ使う。 */
+export type Provider = 'jev' | 'openjev' | 'custom'
+
 export type Config = {
+  /** 認証キー。自前で立てた OpenJev のように認証なしのサーバなら null のままでよい。 */
   apiKey: string | null
+  /**
+   * System One を実際に呼ぶか。
+   *
+   * TypeSafe の本家を向いているならキーが要る。自前のサーバ（= 既定以外の
+   * baseUrl）を向いているなら、キー無しでも呼べる前提で有効にする。
+   */
+  enabled: boolean
+  provider: Provider
   model: string
   baseUrl: string
   /** .mmd と state.json を書く場所。セッションの作業ディレクトリからの相対。 */
@@ -50,6 +62,15 @@ function truthy(value: string | undefined): boolean {
   return normalized === '1' || normalized === 'true' || normalized === 'yes' || normalized === 'on'
 }
 
+/** baseUrl から実装の見当をつける。表示用なので外れても動作には影響しない。 */
+export function providerOf(baseUrl: string, isDefault: boolean): Provider {
+  if (isDefault) return 'jev'
+  const host = baseUrl.toLowerCase()
+  if (host.includes('openjev') || host.includes('codiv')) return 'openjev'
+  if (host.includes('typesafe.ai')) return 'jev'
+  return 'custom'
+}
+
 export function readConfig(env: EnvBag): Config {
   const apiKey =
     env.MERMAID_LIVE_API_KEY?.trim() ??
@@ -69,10 +90,18 @@ export function readConfig(env: EnvBag): Config {
           changed: DEFAULT_THRESHOLDS.changed,
         }
 
+  const configuredBaseUrl = env.MERMAID_LIVE_BASE_URL?.trim()
+  const baseUrl = configuredBaseUrl === undefined || configuredBaseUrl.length === 0 ? JEV_BASE_URL : configuredBaseUrl
+  const isDefaultBaseUrl = baseUrl === JEV_BASE_URL
+  const key = apiKey.length > 0 ? apiKey : null
+
   return {
-    apiKey: apiKey.length > 0 ? apiKey : null,
+    apiKey: key,
+    // 本家はキーが要る。自前のサーバは既定で認証なしなので、向き先を変えた時点で有効。
+    enabled: key !== null || !isDefaultBaseUrl,
+    provider: providerOf(baseUrl, isDefaultBaseUrl),
     model: env.MERMAID_LIVE_MODEL?.trim() || JEV_DEFAULT_MODEL,
-    baseUrl: env.MERMAID_LIVE_BASE_URL?.trim() || JEV_BASE_URL,
+    baseUrl,
     dir: env.MERMAID_LIVE_DIR?.trim() || '.claude/mermaid-live',
     port: numberOr(env.MERMAID_LIVE_PORT, 4737),
     autoViewer: truthy(env.MERMAID_LIVE_VIEWER),

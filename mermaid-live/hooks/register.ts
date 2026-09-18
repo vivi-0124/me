@@ -88,9 +88,12 @@ export const register: Register = (on) => {
     mod.turnId = null
     mod.status = {
       ...IDLE_STATUS,
-      jevEnabled: config.apiKey !== null,
+      jevEnabled: config.enabled,
+      provider: config.provider,
       viewerUrl: config.autoViewer ? `http://127.0.0.1:${config.port}` : null,
-      reason: config.apiKey === null ? 'Jev の API キーが無いので規則ベースで動きます' : '待機中',
+      reason: config.enabled
+        ? '待機中'
+        : 'API キーも自前サーバも無いので規則ベースで動きます',
     }
 
     if (config.autoViewer && !mod.viewerStarted) {
@@ -156,7 +159,8 @@ export const register: Register = (on) => {
             direction: meta.direction,
             confidence: meta.confidence,
             reason: final ? '応答が終わりました（確定）' : '応答の途中経過です',
-            jev: config.apiKey !== null,
+            jev: config.enabled,
+            provider: config.provider,
             final,
             mermaid,
           },
@@ -207,13 +211,13 @@ export const register: Register = (on) => {
           return
         }
 
-        mod.status = { ...mod.status, phase: 'thinking', reason: 'Jev に判定を依頼中' }
+        mod.status = { ...mod.status, phase: 'thinking', reason: `${config.provider} に判定を依頼中` }
         $.ui.invalidate('ui.render')
 
         let decision: Decision
         let tokens: number | null = mod.status.tokens
 
-        if (config.apiKey === null) {
+        if (!config.enabled) {
           decision = decideWithoutJev(outline, mod.mermaid !== null)
         } else {
           const evaluation = evaluate({
@@ -228,7 +232,7 @@ export const register: Register = (on) => {
           const timeout = $.clock.sleep(JEV_TIMEOUT_MS).then(() => 'timeout' as const)
           const settled = await Promise.race([evaluation, timeout])
           if (settled === 'timeout') {
-            mod.status = { ...mod.status, phase: 'held', reason: 'Jev の応答が遅いので今回は見送り' }
+            mod.status = { ...mod.status, phase: 'held', reason: `${config.provider} の応答が遅いので今回は見送り` }
             $.ui.invalidate('ui.render')
             return
           }

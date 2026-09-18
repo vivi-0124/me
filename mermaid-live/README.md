@@ -54,8 +54,10 @@ flowchart LR
 
 - Claude Code 2.1.27x 以降（**Mods は早期アクセス**）
 - Node.js 22.6 以降（ビューアとテスト用。依存パッケージはゼロ）
-- Jev の API キー（[console.typesafe.ai/keys](https://console.typesafe.ai/keys)）
-  - 無くても動く。その場合は規則ベースの当て推量で図を出す（帯に「Jev 無効」と出る）
+- 判定に使う System One のエンドポイント。次のどれか:
+  - **TypeSafe の Jev**（[console.typesafe.ai/keys](https://console.typesafe.ai/keys)）。早期アクセス、ウェイトリスト制
+  - **[OpenJev](docs/openjev.md)** — 同じ API をオープンな重みで話す独立実装。無料のホスト版か、自分の GPU で
+  - **何も無し** でも動く。その場合は規則ベースの当て推量で図を出す（帯に「判定なし」と出る）
 
 ## 料金
 
@@ -73,7 +75,11 @@ node tools/cost.ts answer.md    # 自分の文章で
 
 払うのは、この Mod を動かしているマシンの環境変数に入っているキーの持ち主。
 Claude Code の利用料とは別勘定で、TypeSafe から直接請求される。
-キーが未設定なら Jev は 1 度も呼ばれず、規則ベースで動く（料金ゼロ）。
+キーが未設定なら 1 度も呼ばれず、規則ベースで動く（料金ゼロ）。
+
+**お金を払いたくない / ウェイトリストを待ちたくない場合**は、同じ API を話す
+[OpenJev](docs/openjev.md) に向き先を変えられる。無料のホスト版（入力 100M トークン、
+カード不要）か、自分の GPU で動かす（この場合キーすら要らない）。
 
 ## 使い方
 
@@ -133,8 +139,8 @@ npm run demo -- answer.md       # 自分の文章で試す
 | 変数 | 既定値 | 意味 |
 |---|---|---|
 | `MERMAID_LIVE_API_KEY` / `TYPESAFE_API_KEY` / `TYPESAFE_AI_API_KEY` | なし | Jev のキー。無ければ規則ベース（[料金](docs/pricing.md)） |
-| `MERMAID_LIVE_MODEL` | `jev-latest` | Jev のモデル |
-| `MERMAID_LIVE_BASE_URL` | `https://api.typesafe.ai/v1` | Vercel AI Gateway 等に向けるとき |
+| `MERMAID_LIVE_MODEL` | `jev-latest` | モデル名。OpenJev は `jev-latest` も受けるので、そのままでも動く |
+| `MERMAID_LIVE_BASE_URL` | `https://api.typesafe.ai/v1` | [OpenJev](docs/openjev.md) や Vercel AI Gateway に向けるとき。**既定以外を指すとキー無しでも有効になる** |
 | `MERMAID_LIVE_DIR` | `.claude/mermaid-live` | `current.mmd` と `state.json` の置き場 |
 | `MERMAID_LIVE_PORT` | `4737` | ビューアのポート |
 | `MERMAID_LIVE_VIEWER` | なし | `1` でセッション開始時にビューアを自動起動 |
@@ -157,6 +163,7 @@ viewer/                依存ゼロのビューア（SSE + Mermaid は CDN か�
 tools/demo.ts          Claude Code 抜きで通す
 tools/cost.ts          1 応答あたりの Jev のコストを見積もる
 docs/pricing.md        Jev の料金と実測コスト
+docs/openjev.md        OpenJev（自前 / 無料）に切り替える
 ```
 
 設計で効いているのは 3 点:
@@ -165,6 +172,9 @@ docs/pricing.md        Jev の料金と実測コスト
   Jev への往復と書き出しは別の Promise に逃がしてあり、チャンクはそのまま素通しする。
 - **聞きすぎない。** 「前回から N 文字増えた」かつ「M ミリ秒経った」ときだけ聞く。
   時計を見るのもホストへの往復なので、その前に文字数だけで足切りしている。
+- **判定エンジンは差し替えられる。** 送っているのは System One のワイヤ API
+  （`POST /v1/systemone`）なので、同じ API を話すサーバなら向き先を変えるだけで動く。
+  `hooks/lib/jev.ts` がその境界。
 - **閉じていない ```mermaid は使わない。** 応答自体が Mermaid を書き始めた場合、
   閉じフェンスが来るまでは未完として扱い、材料から自前で組み立てる。
 

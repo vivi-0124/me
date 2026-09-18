@@ -218,3 +218,28 @@ test('サブエージェントの応答には手を出さない', async () => {
   while (done.done !== true) done = await stream.next()
   assert.equal(written.size, 0)
 })
+
+test('自前の OpenJev を向けると、キー無しでそこを叩く', async () => {
+  const { written, requests } = await run(drawBody, {
+    MERMAID_LIVE_BASE_URL: 'http://127.0.0.1:8080/v1',
+  })
+
+  assert.equal(requests.length >= 1, true)
+  assert.equal(requests[0]?.url, 'http://127.0.0.1:8080/v1/systemone')
+
+  const state = JSON.parse(written.get('.claude/mermaid-live/state.json') ?? '{}')
+  assert.equal(state.jev, true)
+  assert.equal(state.provider, 'custom')
+  assert.match(written.get('.claude/mermaid-live/current.mmd') ?? '', /^flowchart TD/)
+})
+
+test('Codiv のホスト版を向けると openjev として記録される', async () => {
+  const { written, requests } = await run(drawBody, {
+    MERMAID_LIVE_BASE_URL: 'https://api.codiv.ai/v1',
+    MERMAID_LIVE_API_KEY: 'sk-codiv-test',
+  })
+
+  assert.equal(requests[0]?.url, 'https://api.codiv.ai/v1/systemone')
+  const state = JSON.parse(written.get('.claude/mermaid-live/state.json') ?? '{}')
+  assert.equal(state.provider, 'openjev')
+})
