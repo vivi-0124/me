@@ -1,0 +1,11 @@
+{
+  "name": "vivi-mods",
+  "owner": { "name": "vivi-0124" },
+  "plugins": [
+    {
+      "name": "mermaid-live",
+      "source": "./mermaid-live",
+      "description": "Claude の応答をリアルタイムで Mermaid 図解する Mod。図にするか・どの図か・もう描いていいかの判断を Jev（TypeSafe AI の System One モデル）に確率で聞く。"
+    }
+  ]
+}

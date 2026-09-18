@@ -1,0 +1,7 @@
+{
+  "name": "mermaid-live",
+  "version": "0.1.0",
+  "description": "Claude の応答が流れてくる途中から Mermaid で図解する Mod。図にすべきか・どの図か・もう描いていいかの判断だけを Jev（TypeSafe AI の System One モデル）に確率で聞き、Mermaid のソースは決定的に組み立てる。",
+  "author": { "name": "vivi-0124" },
+  "license": "MIT"
+}
