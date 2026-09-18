@@ -24,7 +24,9 @@ flowchart LR
 
 ## 見た目
 
-応答が伸びるのに合わせて図が育つ。左が材料 2 本の途中（確率 0.78）、右が応答が終わった時点（0.91）。
+応答が伸びるのに合わせて図が育つ。左が材料 2 本の途中、右が応答が終わった時点。
+
+> 図は `extract.ts` → `toMermaid()` が実際に生成したもの。ただし **0.78 / 0.91 という確率は表示例で、Jev が返した値ではない**（撮影時に API キーを持っていないため）。
 
 | 途中経過 | 確定 |
 |---|---|
@@ -54,6 +56,24 @@ flowchart LR
 - Node.js 22.6 以降（ビューアとテスト用。依存パッケージはゼロ）
 - Jev の API キー（[console.typesafe.ai/keys](https://console.typesafe.ai/keys)）
   - 無くても動く。その場合は規則ベースの当て推量で図を出す（帯に「Jev 無効」と出る）
+
+## 料金
+
+Jev は **$0.042 / 100万入力トークン、出力は $0**（自己回帰的に生成しないので課金対象の出力トークンが無い）。
+
+この Mod の実測では **1000 応答あたり $0.07〜0.32**。1 日 100 応答を毎日使っても月 $1〜3 程度。
+
+```bash
+node tools/cost.ts              # 実際に送るリクエストを組み立てて見積もる（通信しない）
+node tools/cost.ts answer.md    # 自分の文章で
+```
+
+内訳、コストを下げるつまみ、普通の LLM に同じ判定をさせた場合との比較、出典は
+**[docs/pricing.md](docs/pricing.md)** にまとめてある。
+
+払うのは、この Mod を動かしているマシンの環境変数に入っているキーの持ち主。
+Claude Code の利用料とは別勘定で、TypeSafe から直接請求される。
+キーが未設定なら Jev は 1 度も呼ばれず、規則ベースで動く（料金ゼロ）。
 
 ## 使い方
 
@@ -112,7 +132,7 @@ npm run demo -- answer.md       # 自分の文章で試す
 
 | 変数 | 既定値 | 意味 |
 |---|---|---|
-| `MERMAID_LIVE_API_KEY` / `TYPESAFE_API_KEY` / `TYPESAFE_AI_API_KEY` | なし | Jev のキー。無ければ規則ベース |
+| `MERMAID_LIVE_API_KEY` / `TYPESAFE_API_KEY` / `TYPESAFE_AI_API_KEY` | なし | Jev のキー。無ければ規則ベース（[料金](docs/pricing.md)） |
 | `MERMAID_LIVE_MODEL` | `jev-latest` | Jev のモデル |
 | `MERMAID_LIVE_BASE_URL` | `https://api.typesafe.ai/v1` | Vercel AI Gateway 等に向けるとき |
 | `MERMAID_LIVE_DIR` | `.claude/mermaid-live` | `current.mmd` と `state.json` の置き場 |
@@ -135,6 +155,8 @@ hooks/lib/buffer.ts    チャンクを溜めて、いつ聞くかを決める
 hooks/lib/band.ts      入力欄の上の帯
 viewer/                依存ゼロのビューア（SSE + Mermaid は CDN から）
 tools/demo.ts          Claude Code 抜きで通す
+tools/cost.ts          1 応答あたりの Jev のコストを見積もる
+docs/pricing.md        Jev の料金と実測コスト
 ```
 
 設計で効いているのは 3 点:
@@ -172,7 +194,7 @@ claude plugin validate .              # Mod の形と $ の呼び出しを検査
   `viewer/index.html` の import を手元のファイルに差し替える必要がある。
 - **日本語の抽出は素朴。** 番号付きリスト・箇条書き・`A -> B` の矢印が主な手がかりなので、
   地の文だけで説明された手順は拾いきれない。ここは `hooks/lib/extract.ts` を育てる場所。
-- **Jev には料金がかかる。** 1 応答あたり数回の評価で、送るのは末尾 4000 文字まで。
+- **Jev には料金がかかる。** 1000 応答あたり $0.07〜0.32 の実測。コストは応答の長さに対して二次で伸びる（毎回それまでの本文を送り直すため）。詳細と削り方は [docs/pricing.md](docs/pricing.md)。
 
 ## 参考
 
