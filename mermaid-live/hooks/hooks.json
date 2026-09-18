@@ -1,0 +1,4 @@
+{
+  "description": "turn.step で応答テキストを溜め、Jev の判定を通ったものを Mermaid にして AbovePrompt とビューアに出す",
+  "modules": ["./register.ts"]
+}
