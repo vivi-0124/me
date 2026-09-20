@@ -1,0 +1,57 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "hello-world",
+  "title": "Hello World",
+  "description": "Raycast 拡張機能のテンプレート",
+  "icon": "icon.png",
+  "author": "vivi-0124",
+  "license": "MIT",
+  "categories": [
+    "Productivity"
+  ],
+  "commands": [
+    {
+      "name": "search-items",
+      "title": "Search Items",
+      "subtitle": "Hello World",
+      "description": "リスト表示のサンプルコマンド",
+      "mode": "view"
+    },
+    {
+      "name": "show-message",
+      "title": "Show Message",
+      "subtitle": "Hello World",
+      "description": "UI を出さずにトーストだけ表示するサンプル",
+      "mode": "no-view"
+    }
+  ],
+  "preferences": [
+    {
+      "name": "greeting",
+      "title": "Greeting",
+      "description": "コマンドで表示する挨拶文",
+      "type": "textfield",
+      "required": false,
+      "default": "Hello"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.103.0",
+    "@raycast/utils": "^2.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.10",
+    "eslint": "^9.22.0",
+    "@raycast/eslint-config": "^2.0.4",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
+  },
+  "scripts": {
+    "build": "ray build",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "publish": "npx @raycast/api@latest publish"
+  }
+}
