@@ -2,7 +2,7 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "claude-skills",
   "title": "Claude Skills",
-  "description": "ローカルの Claude Code skill を一覧・共有・削除する",
+  "description": "Browse your local Claude Code skills, paste their slash commands, share them, and delete the ones you no longer need.",
   "icon": "icon.png",
   "author": "vivi-0124",
   "license": "MIT",
@@ -14,7 +14,7 @@
       "name": "search-skills",
       "title": "Search Skills",
       "subtitle": "Claude Skills",
-      "description": "ユーザースコープの skill を検索して /コマンドをペーストする",
+      "description": "Search skills in ~/.claude/skills and paste their slash command",
       "mode": "view"
     }
   ],
@@ -22,7 +22,7 @@
     {
       "name": "claudeHome",
       "title": "Claude Data Folder",
-      "description": "空の場合は CLAUDE_CONFIG_DIR、それも無ければ ~/.claude を使う",
+      "description": "Leave empty to use CLAUDE_CONFIG_DIR, or ~/.claude when that is unset",
       "type": "textfield",
       "required": false,
       "default": ""
@@ -30,7 +30,7 @@
     {
       "name": "exportDirectory",
       "title": "Zip Export Folder",
-      "description": "Export as Zip の保存先",
+      "description": "Where Export as Zip writes the archive",
       "type": "directory",
       "required": false,
       "default": "~/Downloads"
