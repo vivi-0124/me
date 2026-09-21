@@ -1,4 +1,4 @@
-import { environment, getPreferenceValues } from "@raycast/api";
+import { getPreferenceValues } from "@raycast/api";
 import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";
 import { homedir } from "node:os";
@@ -38,17 +38,6 @@ export async function exportSkillZip(dirPath: string, dirName: string): Promise<
   await fs.mkdir(target, { recursive: true });
 
   const zipPath = await uniquePath(target, dirName);
-  await ditto(dirPath, zipPath);
-  return zipPath;
-}
-
-/** クリップボードに載せる用の zip を support ディレクトリに作る（毎回上書き） */
-export async function stageSkillZip(dirPath: string, dirName: string): Promise<string> {
-  const target = join(environment.supportPath, "zip");
-  await fs.mkdir(target, { recursive: true });
-
-  const zipPath = join(target, `${dirName}.zip`);
-  await fs.rm(zipPath, { force: true });
   await ditto(dirPath, zipPath);
   return zipPath;
 }
