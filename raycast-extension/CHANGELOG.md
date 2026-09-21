@@ -1,8 +1,8 @@
 # Claude Skills Changelog
 
-## [Initial Version] - {PR_MERGE_DATE}
+## [Initial Version] - 2026-09-21
 
-- Browse skills in `~/.claude/skills` with a two-pane list: names on the left, frontmatter, path and body on the right
-- Paste or copy a skill's slash command, folder path, or full `SKILL.md` contents
-- Export a skill folder as a zip, or copy the zip to the clipboard to share it
-- Move a skill folder to the Trash after a confirmation
+- `~/.claude/skills` の skill を左右 2 ペイン（左: 一覧 / 右: frontmatter・パス・本文）で表示するようにした
+- 選んだ skill の `/コマンド`・フルパス・SKILL.md 全文を、コピー / ペーストできるようにした
+- skill フォルダを zip にして書き出す / クリップボードにファイルとして載せるアクションを追加した
+- 確認ダイアログの後に skill フォルダをゴミ箱へ移動できるようにした
