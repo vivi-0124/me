@@ -1,46 +1,57 @@
-# Hello World (Raycast 拡張機能テンプレート)
+# Claude Skills (Raycast 拡張機能)
 
-Raycast 拡張機能の最小テンプレート。`view` コマンドと `no-view` コマンド、環境設定 (preferences) の例が入っている。
+ローカルの Claude Code skill (`~/.claude/skills`) を一覧して、`/skill名` をそのままペースト・共有・削除する拡張機能。
+
+**create / update はやらない**（編集はエディタでやる前提。フルパスをコピーして `code <paste>` で開く）。
 
 ## 使い方（macOS + Raycast アプリが必要）
 
 ```bash
 cd raycast-extension
 npm install
-npm run dev    # 開発モード。Raycast に読み込まれ、保存でホットリロード
+npm run dev
 ```
 
-Raycast のランチャーで `Search Items` / `Show Message` を検索すると実行できる。
-`Ctrl + C` で開発モードを終了しても拡張機能は Raycast に残る。
+Raycast で `Search Skills` を実行。左に skill 一覧、右に frontmatter とパスが出る。
+
+## アクション
+
+| 操作 | ショートカット | 内容 |
+| --- | --- | --- |
+| Paste Slash Command | `Enter` | 最前面のアプリに `/{skill名}` をペースト |
+| Copy Slash Command | `Cmd+Enter` | `/{skill名}` をコピー |
+| Copy Skill Path | `Cmd+Shift+C` | skill ディレクトリのフルパス（`SKILL.md` は含まない） |
+| Paste Skill Path | `Cmd+Shift+V` | 同上をペースト |
+| Copy Skill Contents | `Cmd+Shift+F` | SKILL.md の全文（frontmatter 込み） |
+| Paste Skill Contents | `Cmd+Opt+V` | 同上をペースト |
+| Export as Zip | `Cmd+Shift+E` | skill フォルダを zip にして保存先に書き出す |
+| Copy Zip to Clipboard | `Cmd+Shift+Z` | zip をクリップボードにファイルとして載せる（Slack に Cmd+V で添付） |
+| Delete Skill | `Ctrl+X` | 確認ダイアログ → ディレクトリごとゴミ箱へ |
+
+削除は `trash()` なのでゴミ箱から戻せる。zip は macOS 標準の `ditto --keepParent` で作るため、展開すると `{skill名}/SKILL.md` の階層に戻る。
+
+## 設定 (Preferences)
+
+- **Claude Data Folder**: 空なら `CLAUDE_CONFIG_DIR`、それも無ければ `~/.claude`
+- **Zip Export Folder**: `Export as Zip` の保存先（既定 `~/Downloads`）
 
 ## 構成
 
 | パス | 役割 |
 | --- | --- |
-| `package.json` | 拡張機能のメタデータ。`commands` が各コマンド定義、`preferences` がユーザー設定 |
-| `src/search-items.tsx` | `mode: "view"` のコマンド。`List` で一覧表示 |
-| `src/show-message.tsx` | `mode: "no-view"` のコマンド。トーストのみ表示 |
-| `assets/icon.png` | 512x512 のアイコン（仮。差し替えること） |
+| `src/search-skills.tsx` | コマンド本体（List + Detail + Actions） |
+| `src/lib/skills.ts` | `~/.claude/skills` の走査と frontmatter パース |
+| `src/lib/zip.ts` | `ditto` での zip 生成 |
 
-`commands[].name` と `src/<name>.tsx` のファイル名が対応している。コマンドを増やすときは
-`package.json` に定義を足し、同名のファイルを `src/` に作る。
+skill の名前は **ディレクトリ名**を正とする（`/xxx` で呼ぶ名前がディレクトリ名のため）。frontmatter の `name` がズレている場合は詳細に警告が出る。
 
-`Preferences.SearchItems` などの型は `npm run dev` / `npm run build` 時に
-`raycast-env.d.ts` として自動生成される（gitignore 済み）。
+## スコープ
+
+現状はユーザースコープ (`~/.claude/skills`) のみ。`Skill` 型に `scope` を持たせてあるので、プロジェクトスコープ (`.claude/skills`) は後から足せる。
 
 ## チェック
 
 ```bash
 npm run lint
-npm run fix-lint
 npm run build
 ```
-
-## 公開する場合
-
-```bash
-npm run publish
-```
-
-公開前に `author` を Raycast アカウント名にし、アイコン・スクリーンショット・`categories` を整えること。
-詳細は [../raycast拡張機能の作り方.md](../raycast拡張機能の作り方.md) を参照。
