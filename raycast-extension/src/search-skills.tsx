@@ -35,7 +35,7 @@ export default function Command() {
             key={skill.id}
             icon={skill.parseError ? { source: Icon.Warning, tintColor: Color.Yellow } : Icon.Book}
             title={skill.dirName}
-            subtitle={skill.description}
+            // description は右ペインで読めるので、左は名前だけにする（検索では keywords 経由で引っかかる）
             keywords={skill.description?.split(/\s+/)}
             detail={<SkillDetail skill={skill} />}
             actions={<SkillActions skill={skill} onChange={revalidate} />}
