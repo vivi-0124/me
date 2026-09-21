@@ -36,7 +36,7 @@
     {
       "name": "exportDirectory",
       "title": "Zip Export Folder",
-      "description": "Export as Zip の保存先",
+      "description": "zip の書き出し先（Export as Zip と Copy Zip to Clipboard の両方）",
       "type": "directory",
       "required": false,
       "default": "~/Downloads"

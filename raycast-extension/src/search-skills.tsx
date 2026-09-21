@@ -16,7 +16,7 @@ import {
 import { showFailureToast, useCachedPromise } from "@raycast/utils";
 import { dirname } from "node:path";
 import { Skill, loadSkills, skillsRoot } from "./lib/skills";
-import { exportSkillZip, stageSkillZip } from "./lib/zip";
+import { exportSkillZip } from "./lib/zip";
 
 export default function Command() {
   const { data: skills, isLoading, revalidate } = useCachedPromise(loadSkills, []);
@@ -119,11 +119,15 @@ function SkillActions({ skill, onChange }: { skill: Skill; onChange: () => void 
   async function handleCopyZip() {
     const toast = await showToast({ style: Toast.Style.Animated, title: "zip を作成中..." });
     try {
-      const zipPath = await stageSkillZip(skill.dirPath, skill.dirName);
+      const zipPath = await exportSkillZip(skill.dirPath, skill.dirName);
       await Clipboard.copy({ file: zipPath });
       toast.style = Toast.Style.Success;
       toast.title = "zip をクリップボードにコピーしました";
-      toast.message = "貼り付け先にファイルとして添付されます";
+      toast.message = zipPath;
+      toast.primaryAction = {
+        title: "Show in Finder",
+        onAction: () => open(dirname(zipPath)),
+      };
     } catch (error) {
       await showFailureToast(error, { title: "zip の作成に失敗しました" });
     }
