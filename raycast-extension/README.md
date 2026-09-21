@@ -1,32 +1,49 @@
 # Claude Skills
 
-Browse the [Claude Code](https://claude.com/claude-code) skills installed on your Mac, paste their slash commands into the app you are working in, share them, and delete the ones you no longer need.
+ローカルの Claude Code skill (`~/.claude/skills`) を一覧して、`/skill名` をそのままペースト・共有・削除する拡張機能。
 
-The extension reads `~/.claude/skills`. It never creates or edits a skill — editing is left to your editor, so copying the folder path is all it offers for that.
+**create / update はやらない**（編集はエディタでやる前提。フルパスをコピーして `code <paste>` で開く）。
 
-## Actions
+## アクション
 
-| Action | Shortcut | What it does |
-| --- | --- | --- |
-| Paste Slash Command | `Enter` | Pastes `/{skill-name}` into the frontmost app |
-| Copy Slash Command | `Cmd+Enter` | Copies `/{skill-name}` |
-| Copy Skill Path | `Cmd+Shift+C` | Copies the skill folder path (without `SKILL.md`) |
-| Paste Skill Path | `Cmd+Shift+V` | Pastes the same path |
-| Copy Skill Contents | `Cmd+Shift+F` | Copies the whole `SKILL.md`, frontmatter included |
-| Paste Skill Contents | `Cmd+Opt+V` | Pastes the same contents |
-| Export as Zip | `Cmd+Shift+E` | Writes the skill folder as a zip to the export folder |
-| Copy Zip to Clipboard | `Cmd+Shift+Z` | Copies the zip as a file, ready to paste into Slack or an email |
-| Delete Skill | `Ctrl+X` | Moves the skill folder to the Trash after a confirmation |
+| 操作                  | ショートカット | 内容                                                                |
+| --------------------- | -------------- | ------------------------------------------------------------------- |
+| Paste Slash Command   | `Enter`        | 最前面のアプリに `/{skill名}` をペースト                            |
+| Copy Slash Command    | `Cmd+Enter`    | `/{skill名}` をコピー                                               |
+| Copy Skill Path       | `Cmd+Shift+C`  | skill ディレクトリのフルパス（`SKILL.md` は含まない）               |
+| Paste Skill Path      | `Cmd+Shift+V`  | 同上をペースト                                                      |
+| Copy Skill Contents   | `Cmd+Shift+F`  | SKILL.md の全文（frontmatter 込み）                                 |
+| Paste Skill Contents  | `Cmd+Opt+V`    | 同上をペースト                                                      |
+| Export as Zip         | `Cmd+Shift+E`  | skill フォルダを zip にして保存先に書き出す                         |
+| Copy Zip to Clipboard | `Cmd+Shift+Z`  | zip をクリップボードにファイルとして載せる（Slack に Cmd+V で添付） |
+| Delete Skill          | `Ctrl+X`       | 確認ダイアログ → ディレクトリごとゴミ箱へ                           |
 
-Deletion uses the Trash, so a mistake is recoverable from Finder. Zips are built with `ditto --keepParent`, so they expand back to `{skill-name}/SKILL.md`.
+削除は `trash()` なのでゴミ箱から戻せる。zip は macOS 標準の `ditto --keepParent` で作るため、展開すると `{skill名}/SKILL.md` の階層に戻る。
 
-## Preferences
+## 設定 (Preferences)
 
-- **Claude Data Folder** — leave empty to use `CLAUDE_CONFIG_DIR`, or `~/.claude` when that is unset.
-- **Zip Export Folder** — where `Export as Zip` writes the archive. Defaults to `~/Downloads`.
+- **Claude Data Folder**: 空なら `CLAUDE_CONFIG_DIR`、それも無ければ `~/.claude`
+- **Zip Export Folder**: `Export as Zip` の保存先（既定 `~/Downloads`）
 
-## Notes
+## 開発
 
-A skill's name is its **folder name**, because that is what you type after `/`. When the `name` in the frontmatter differs from the folder name, the detail pane flags it.
+```bash
+npm install
+npm run dev
+npm run lint
+npm run build
+```
 
-Only user-scope skills (`~/.claude/skills`) are listed. Project-scope skills (`.claude/skills`) are not included yet.
+## 構成
+
+| パス                    | 役割                                           |
+| ----------------------- | ---------------------------------------------- |
+| `src/search-skills.tsx` | コマンド本体（List + Detail + Actions）        |
+| `src/lib/skills.ts`     | `~/.claude/skills` の走査と frontmatter パース |
+| `src/lib/zip.ts`        | `ditto` での zip 生成                          |
+
+skill の名前は **ディレクトリ名**を正とする（`/xxx` で呼ぶ名前がディレクトリ名のため）。frontmatter の `name` がズレている場合は詳細に警告が出る。
+
+## スコープ
+
+現状はユーザースコープ (`~/.claude/skills`) のみ。`Skill` 型に `scope` を持たせてあるので、プロジェクトスコープ (`.claude/skills`) は後から足せる。

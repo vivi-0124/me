@@ -2,27 +2,33 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "claude-skills",
   "title": "Claude Skills",
-  "description": "Browse your local Claude Code skills, paste their slash commands, share them, and delete the ones you no longer need.",
-  "icon": "icon.png",
+  "description": "ローカルの Claude Code skill を一覧して、/コマンドのペースト・共有・削除をする",
+  "icon": "extension-icon.png",
   "author": "vivi-0124",
-  "license": "MIT",
+  "owner": "vivi-1610",
+  "access": "private",
+  "platforms": [
+    "macOS"
+  ],
   "categories": [
     "Developer Tools"
   ],
+  "license": "MIT",
   "commands": [
     {
       "name": "search-skills",
       "title": "Search Skills",
       "subtitle": "Claude Skills",
-      "description": "Search skills in ~/.claude/skills and paste their slash command",
+      "description": "~/.claude/skills の skill を検索して /コマンドをペーストする",
       "mode": "view"
     }
   ],
+  "tools": [],
   "preferences": [
     {
       "name": "claudeHome",
       "title": "Claude Data Folder",
-      "description": "Leave empty to use CLAUDE_CONFIG_DIR, or ~/.claude when that is unset",
+      "description": "空の場合は CLAUDE_CONFIG_DIR、それも無ければ ~/.claude を使う",
       "type": "textfield",
       "required": false,
       "default": ""
@@ -30,30 +36,31 @@
     {
       "name": "exportDirectory",
       "title": "Zip Export Folder",
-      "description": "Where Export as Zip writes the archive",
+      "description": "Export as Zip の保存先",
       "type": "directory",
       "required": false,
       "default": "~/Downloads"
     }
   ],
   "dependencies": {
-    "@raycast/api": "^1.103.0",
-    "@raycast/utils": "^2.2.1",
+    "@raycast/api": "^1.104.20",
+    "@raycast/utils": "^2.2.7",
     "gray-matter": "^4.0.3"
   },
   "devDependencies": {
-    "@types/node": "^22.13.10",
-    "@types/react": "^19.0.10",
-    "eslint": "^9.22.0",
-    "@raycast/eslint-config": "^2.0.4",
-    "prettier": "^3.5.3",
-    "typescript": "^5.8.2"
+    "@raycast/eslint-config": "^2.2.0",
+    "@types/node": "22.19.17",
+    "@types/react": "19.0.10",
+    "eslint": "^10.5.0",
+    "prettier": "^3.8.5",
+    "typescript": "^6.0.3"
   },
   "scripts": {
     "build": "ray build",
     "dev": "ray develop",
     "fix-lint": "ray lint --fix",
     "lint": "ray lint",
+    "prepublishOnly": "echo \"\\n\\nIt seems like you are trying to publish the Raycast extension to npm.\\n\\nIf you did intend to publish it to npm, remove the \\`prepublishOnly\\` script and rerun \\`npm publish\\` again.\\nIf you wanted to publish it to the Raycast Store instead, use \\`npm run publish\\` instead.\\n\\n\" && exit 1",
     "publish": "npx @raycast/api@latest publish"
   }
 }
