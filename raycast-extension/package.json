@@ -1,43 +1,45 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "hello-world",
-  "title": "Hello World",
-  "description": "Raycast 拡張機能のテンプレート",
+  "name": "claude-skills",
+  "title": "Claude Skills",
+  "description": "ローカルの Claude Code skill を一覧・共有・削除する",
   "icon": "icon.png",
   "author": "vivi-0124",
   "license": "MIT",
   "categories": [
-    "Productivity"
+    "Developer Tools"
   ],
   "commands": [
     {
-      "name": "search-items",
-      "title": "Search Items",
-      "subtitle": "Hello World",
-      "description": "リスト表示のサンプルコマンド",
+      "name": "search-skills",
+      "title": "Search Skills",
+      "subtitle": "Claude Skills",
+      "description": "ユーザースコープの skill を検索して /コマンドをペーストする",
       "mode": "view"
-    },
-    {
-      "name": "show-message",
-      "title": "Show Message",
-      "subtitle": "Hello World",
-      "description": "UI を出さずにトーストだけ表示するサンプル",
-      "mode": "no-view"
     }
   ],
   "preferences": [
     {
-      "name": "greeting",
-      "title": "Greeting",
-      "description": "コマンドで表示する挨拶文",
+      "name": "claudeHome",
+      "title": "Claude Data Folder",
+      "description": "空の場合は CLAUDE_CONFIG_DIR、それも無ければ ~/.claude を使う",
       "type": "textfield",
       "required": false,
-      "default": "Hello"
+      "default": ""
+    },
+    {
+      "name": "exportDirectory",
+      "title": "Zip Export Folder",
+      "description": "Export as Zip の保存先",
+      "type": "directory",
+      "required": false,
+      "default": "~/Downloads"
     }
   ],
   "dependencies": {
     "@raycast/api": "^1.103.0",
-    "@raycast/utils": "^2.2.1"
+    "@raycast/utils": "^2.2.1",
+    "gray-matter": "^4.0.3"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",
