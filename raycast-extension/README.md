@@ -23,7 +23,7 @@
 ## 設定 (Preferences)
 
 - **Claude Data Folder**: 空なら `CLAUDE_CONFIG_DIR`、それも無ければ `~/.claude`
-- **Zip Export Folder**: `Export as Zip` の保存先（既定 `~/Downloads`）
+- **Zip Export Folder**: zip の保存先（既定 `~/Downloads`）。`Export as Zip` と `Copy Zip to Clipboard` の両方がここに書き出す
 
 ## 開発
 
