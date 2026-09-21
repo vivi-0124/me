@@ -1,0 +1,59 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "claude-skills",
+  "title": "Claude Skills",
+  "description": "ローカルの Claude Code skill を一覧・共有・削除する",
+  "icon": "icon.png",
+  "author": "vivi-0124",
+  "license": "MIT",
+  "categories": [
+    "Developer Tools"
+  ],
+  "commands": [
+    {
+      "name": "search-skills",
+      "title": "Search Skills",
+      "subtitle": "Claude Skills",
+      "description": "ユーザースコープの skill を検索して /コマンドをペーストする",
+      "mode": "view"
+    }
+  ],
+  "preferences": [
+    {
+      "name": "claudeHome",
+      "title": "Claude Data Folder",
+      "description": "空の場合は CLAUDE_CONFIG_DIR、それも無ければ ~/.claude を使う",
+      "type": "textfield",
+      "required": false,
+      "default": ""
+    },
+    {
+      "name": "exportDirectory",
+      "title": "Zip Export Folder",
+      "description": "Export as Zip の保存先",
+      "type": "directory",
+      "required": false,
+      "default": "~/Downloads"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.103.0",
+    "@raycast/utils": "^2.2.1",
+    "gray-matter": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.10",
+    "eslint": "^9.22.0",
+    "@raycast/eslint-config": "^2.0.4",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
+  },
+  "scripts": {
+    "build": "ray build",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "publish": "npx @raycast/api@latest publish"
+  }
+}
