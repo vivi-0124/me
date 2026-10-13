@@ -265,6 +265,20 @@
 5. カスミソウ
 6. オムライス
 
+### 2025年10月4日（土）Zepp ツアー "Roots" ファイナル（追加公演、完売）
+- 会場: Zepp Haneda (TOKYO)
+- 取れた範囲: **一部の曲のみ**（全曲のセトリは X・ブログ・セトリサイトのどこにも見つからなかった）
+- 演奏が確認できた曲:
+  - シェイプシフター（この日が初披露。配信は4日後の10月8日）
+    - 出典: Real Sound https://realsound.jp/2025/10/post-2180213.html / 公式 YouTube のライブ映像 https://www.youtube.com/watch?v=LlgvxlFVMcQ
+  - Any
+    - 出典: 公式 YouTube のライブ映像（「2025.10.04@Zepp Haneda (TOKYO)」と表記）https://www.youtube.com/watch?v=b7yNp9LZ5gI
+- この日のこと:
+  - 本編中に、初の日本武道館単独公演（2026年10月15日）を発表した。
+  - ライブの一部を YouTube と X で生配信した。
+  - ROCKIN'ON JAPAN のインタビューによると、ツアー8本目だったこの公演では、セトリを急に変えた（https://rockinon.com/interview/detail/213553）。
+  - ツアー前、菊池陽報は X で「ツアーのセットリストはファイナル公演まで秘密にしといてください！」と書いていた（https://x.com/akitsugu0/status/1963938848355868776）。てるも「Zeppツアーのセトリ エグい楽しみにしててください」と投稿していた（https://x.com/Teru_SL13/status/1955615070127591766）。
+
 ### 2025年12月29日（月）COUNTDOWN JAPAN 25/26
 - 会場: 幕張メッセ GALAXY STAGE（19:40〜、この日のステージのトリ）
 - 出典: rockinon.com https://rockinon.com/quick/cdj2526/detail/214050
@@ -345,7 +359,6 @@
 | 2023年9月2日〜23日 | 初のホールツアー（NHK大阪ホール、名古屋市公会堂、人見記念講堂） | バンド公式 X |
 | 2024年4月21日（日） | "HOME" ツアー Zepp DiverCity | https://www.livefans.jp/events/1583526 |
 | 2024年8月31日（土） | SWEET LOVE SHOWER 2024 | https://www.yawarakai.com/84791 |
-| 2025年10月4日（土） | Zepp ツアー "Roots" ファイナル Zepp Haneda（武道館公演を発表した日） | バンド公式 X / YouTube の生配信 |
 | 2026年1月25日（日） | FUKUOKA MUSIC FES.2026（みずほPayPayドーム福岡） | https://report-newage.com/61634 |
 | 2026年3月21日（土） | ツタロックフェス2026 | https://www.yawarakai.com/23590 |
 | 2026年5月3日（日・祝） | VIVA LA ROCK 2026 VIVA! STAGE（13:30〜） | https://muhoric.com/vivalarock2026-setlist/ |
