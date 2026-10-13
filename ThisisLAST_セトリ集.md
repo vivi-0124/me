@@ -268,6 +268,8 @@
 ### 2025年10月4日（土）Zepp ツアー "Roots" ファイナル（追加公演、完売）
 - 会場: Zepp Haneda (TOKYO)
 - 取れた範囲: **一部の曲のみ**（全曲のセトリは X・ブログ・セトリサイトのどこにも見つからなかった）
+- 参考（中身は未確認）: もとりょこblog https://motoryokoblog.com/?p=24674
+  - "Roots" のセトリが載っている可能性があるとして教えてもらったページ。この環境からは開けず、検索にも出てこなかったので、内容はまだ反映していない。
 - 演奏が確認できた曲:
   - シェイプシフター（この日が初披露。配信は4日後の10月8日）
     - 出典: Real Sound https://realsound.jp/2025/10/post-2180213.html / 公式 YouTube のライブ映像 https://www.youtube.com/watch?v=LlgvxlFVMcQ
