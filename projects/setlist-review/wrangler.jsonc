@@ -1,8 +1,14 @@
 {
   "name": "setlist-review",
-  "main": "src/index.js",
+  "main": "./worker/index.ts",
   "compatibility_date": "2026-10-01",
-  "assets": { "directory": "./public", "binding": "ASSETS" },
+  "assets": {
+    // 画面は Vue の SPA。知らないパスは index.html を返す
+    "not_found_handling": "single-page-application",
+    "binding": "ASSETS",
+    // /e/* は LINE や X 用にタイトルを差し込むので Worker を先に通す
+    "run_worker_first": ["/api/*", "/e/*"]
+  },
   "d1_databases": [
     {
       "binding": "DB",
