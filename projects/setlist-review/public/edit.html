@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0f17">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Shippori+Mincho:wght@600;800&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+<title>ページを作る｜みんなでセトリふりかえり</title>
+<script type="module" src="/js/edit.js"></script>
+</head>
+<body>
+  <nav class="topnav"><a href="/" id="back">← もどる</a></nav>
+
+  <main class="edit">
+    <h1 class="page-title" id="page-title">ふりかえりページを作る</h1>
+    <p class="page-lead" id="page-lead">行ったライブのセトリを貼るだけで、みんなが曲や MC ごとにコメントできるページができます。</p>
+
+    <form id="form" novalidate>
+      <fieldset class="fields">
+        <label class="field">アーティスト名
+          <input name="artist" maxlength="100" placeholder="例: This is LAST" autocomplete="off">
+        </label>
+        <label class="field">公演名・ツアー名
+          <input name="title" maxlength="100" placeholder="例: 日本武道館 &quot;通過点&quot;" autocomplete="off">
+        </label>
+        <div class="field-row">
+          <label class="field">日付
+            <input name="date" type="date">
+          </label>
+          <label class="field">会場
+            <input name="venue" maxlength="100" placeholder="例: 日本武道館" autocomplete="off">
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="setlist-field">
+        <div class="setlist-head">
+          <label for="source" class="field-label">セトリと MC</label>
+          <button type="button" class="link-btn" id="sample">見本を入れる</button>
+        </div>
+        <textarea id="source" name="source" rows="14" placeholder="1.曲名&#10;2.曲名&#10;&#10;MC&#10;話したこと&#10;&#10;3.曲名&#10;&#10;-encore-&#10;en1.曲名"></textarea>
+        <details class="rules">
+          <summary>書き方のルール</summary>
+          <dl>
+            <dt><code>1.曲名</code></dt><dd>曲。数字のあとは「.」「)」かスペース</dd>
+            <dt><code>・メモ</code></dt><dd>曲のすぐ下に書くと、その曲へのメモ</dd>
+            <dt>空行</dt><dd>ブロックの区切り</dd>
+            <dt><code>MC</code> / <code>〇〇 終わりMC</code></dt><dd>ここから MC。下に1行ずつ話したことを書く</dd>
+            <dt><code>名前「セリフ」</code></dt><dd>MC のセリフとして目立たせる</dd>
+            <dt><code>(補足)</code></dt><dd>MC の1つ上の行への補足</dd>
+            <dt><code>🎶曲名</code></dt><dd>MC からそのまま曲へ</dd>
+            <dt><code>-encore-</code></dt><dd>ここからアンコール。<code>en1.曲名</code> でも OK</dd>
+          </dl>
+          <p>X やメモアプリに書いたものをそのまま貼っても、だいたい読み取れます。下のプレビューで確かめてください。</p>
+        </details>
+      </div>
+
+      <section class="preview">
+        <h2 class="section-title">プレビュー <span class="summary" id="summary"></span></h2>
+        <div class="timeline" id="preview"><p class="preview-empty">セトリを書くと、ここに出ます</p></div>
+      </section>
+
+      <div class="form-error" id="error" role="alert"></div>
+      <div class="save-bar">
+        <button type="submit" class="btn btn-primary btn-block" id="save">ページを作る</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>
