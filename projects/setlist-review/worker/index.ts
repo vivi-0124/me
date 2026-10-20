@@ -132,21 +132,39 @@ async function canEdit(c: Ctx, slug: string) {
 
 /* ---------- API: コメント ---------- */
 
+// コメントを書いた人の合言葉（ブラウザごとに1つ）。
+// URL に乗せるとアクセス記録に残るので、ヘッダで受け取る
+const OWNER_HEADER = "x-owner-token";
+const ownerToken = (c: Ctx) => c.req.header(OWNER_HEADER) ?? "";
+
+type CommentRow = {
+  id: number;
+  target_id: string;
+  author: string;
+  body: string;
+  created_at: string;
+  edited_at: string | null;
+  owner_token: string;
+};
+const COMMENT_COLUMNS = "id, target_id, author, body, created_at, edited_at, owner_token";
+
+/** owner_token は返さず、「自分のコメントか」だけを返す */
+function publicComment({ owner_token, ...rest }: CommentRow, token: string) {
+  return { ...rest, mine: token !== "" && owner_token === token };
+}
+
 api.get("/comments", async (c) => {
   const eventId = c.req.query("event") ?? "";
   if (!ID_PATTERN.test(eventId)) return c.json({ error: "event が不正です" }, 400);
 
   const { results } = await c.env.DB.prepare(
-    `SELECT id, target_id, author, body, created_at, owner_token
-       FROM comments WHERE event_id = ? ORDER BY created_at, id`,
+    `SELECT ${COMMENT_COLUMNS} FROM comments WHERE event_id = ? ORDER BY created_at, id`,
   )
     .bind(eventId)
-    .all<{ id: number; target_id: string; author: string; body: string; created_at: string; owner_token: string }>();
+    .all<CommentRow>();
 
-  // owner_token は返さず、「自分のコメントか」だけを返す
-  const token = c.req.query("token") ?? "";
-  const comments = results.map(({ owner_token, ...rest }) => ({ ...rest, mine: token !== "" && owner_token === token }));
-  return c.json({ comments });
+  const token = ownerToken(c);
+  return c.json({ comments: results.map((row) => publicComment(row, token)) });
 });
 
 api.post("/comments", async (c) => {
@@ -170,11 +188,31 @@ api.post("/comments", async (c) => {
   const row = await c.env.DB.prepare(
     `INSERT INTO comments (event_id, target_id, author, body, owner_token)
      VALUES (?, ?, ?, ?, ?)
-     RETURNING id, target_id, author, body, created_at`,
+     RETURNING ${COMMENT_COLUMNS}`,
   )
     .bind(eventId, targetId, author, body, token)
-    .first();
-  return c.json({ comment: { ...row, mine: true } }, 201);
+    .first<CommentRow>();
+  return c.json({ comment: publicComment(row!, token) }, 201);
+});
+
+/** 書いた本人だけが、本文を直せる（ページを作った人でも、人のコメントは直せない） */
+api.patch("/comments/:id{[0-9]+}", async (c) => {
+  const id = Number(c.req.param("id"));
+  const input = (await c.req.json().catch(() => null)) as Record<string, unknown> | null;
+  const body = String(input?.body ?? "").trim();
+  if (!body || body.length > MAX_BODY) return c.json({ error: `コメントは1〜${MAX_BODY}文字で入れてください` }, 400);
+
+  const token = ownerToken(c);
+  if (!token) return c.json({ error: "直せるのは自分のコメントだけです" }, 403);
+  const row = await c.env.DB.prepare(
+    `UPDATE comments SET body = ?, edited_at = strftime('%Y-%m-%dT%H:%M:%SZ', 'now')
+     WHERE id = ? AND owner_token = ?
+     RETURNING ${COMMENT_COLUMNS}`,
+  )
+    .bind(body, id, token)
+    .first<CommentRow>();
+  if (!row) return c.json({ error: "直せるのは自分のコメントだけです" }, 403);
+  return c.json({ comment: publicComment(row, token) });
 });
 
 /** 書いた本人か、そのページを作った人（荒らし対策）だけが消せる */
@@ -185,7 +223,7 @@ api.delete("/comments/:id{[0-9]+}", async (c) => {
     .first<{ event_id: string; owner_token: string }>();
   if (!comment) return c.json({ ok: true });
 
-  const token = c.req.query("token") ?? "";
+  const token = ownerToken(c);
   const allowed = (token !== "" && token === comment.owner_token) || (await canEdit(c, comment.event_id));
   if (!allowed) return c.json({ error: "消せるのは自分のコメントだけです" }, 403);
 

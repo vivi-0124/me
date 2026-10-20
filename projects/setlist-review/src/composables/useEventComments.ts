@@ -23,9 +23,12 @@ function create(slug: string) {
     return map;
   });
 
+  // 自分のコメントを見分ける合言葉。URL に乗せるとアクセス記録に残るので、ヘッダで送る
+  const ownerHeader = () => ({ "x-owner-token": ownerToken.value });
+
   async function load() {
     try {
-      const data = await api<{ comments: Comment[] }>(`/api/comments?event=${slug}&token=${encodeURIComponent(ownerToken.value)}`);
+      const data = await api<{ comments: Comment[] }>(`/api/comments?event=${slug}`, { headers: ownerHeader() });
       comments.value = data.comments;
     } catch {
       // 電波が切れているときは、次の読み込みでまた試す
@@ -40,10 +43,19 @@ function create(slug: string) {
     comments.value = [...comments.value, comment];
   }
 
+  async function edit(c: Comment, body: string) {
+    const { comment } = await api<{ comment: Comment }>(`/api/comments/${c.id}`, {
+      method: "PATCH",
+      body: { body },
+      headers: ownerHeader(),
+    });
+    comments.value = comments.value.map((x) => (x.id === c.id ? comment : x));
+  }
+
   async function remove(c: Comment) {
-    await api(`/api/comments/${c.id}?token=${encodeURIComponent(ownerToken.value)}`, {
+    await api(`/api/comments/${c.id}`, {
       method: "DELETE",
-      headers: editKey.value ? { "x-edit-key": editKey.value } : {},
+      headers: { ...ownerHeader(), ...(editKey.value && { "x-edit-key": editKey.value }) },
     });
     comments.value = comments.value.filter((x) => x.id !== c.id);
   }
@@ -60,7 +72,7 @@ function create(slug: string) {
   useIntervalFn(() => visibility.value === "visible" && load(), POLL_MS);
   watchDebounced(visibility, (v) => v === "visible" && load(), { debounce: 300 });
 
-  return { comments, byTarget, editKey, open, load, post, remove, toggle };
+  return { comments, byTarget, editKey, open, load, post, edit, remove, toggle };
 }
 
 export type EventComments = ReturnType<typeof create>;
