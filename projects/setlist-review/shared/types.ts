@@ -50,5 +50,7 @@ export type Comment = {
   author: string;
   body: string;
   created_at: string;
+  /** 書いた人が編集した日時。編集していなければ null */
+  edited_at: string | null;
   mine: boolean;
 };
