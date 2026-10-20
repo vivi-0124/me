@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useTitle } from "@vueuse/core";
 import { KeyRound, MessageCircle, Pencil, Send } from "@lucide/vue";
@@ -44,10 +44,17 @@ const total = computed(() => comments.comments.value.length);
 const commentedTargets = computed(() =>
   [...comments.byTarget.value.keys()].filter((t) => t !== GENERAL && knownTargets.value.has(t)),
 );
-const allOpen = computed(() => commentedTargets.value.length > 0 && commentedTargets.value.every((t) => comments.open.value.has(t)));
+// 最初は、コメントのある欄を全部開いておく。「全部とじる」を押すまでは、
+// あとから新しくコメントが付いた欄も開く（コメントが0件の欄は、開くと長くなるので閉じたまま）
+const expandAll = ref(true);
+// 1つずつ閉じた欄が、20秒ごとの読み直しでまた開かないよう、新しくコメントが付いた欄だけ開く
+watch(commentedTargets, (targets, before = []) => {
+  if (!expandAll.value) return;
+  for (const t of targets) if (!before.includes(t)) comments.toggle(t, true);
+});
 function toggleAll() {
-  const open = !allOpen.value;
-  for (const t of commentedTargets.value) comments.toggle(t, open);
+  expandAll.value = !expandAll.value;
+  for (const t of commentedTargets.value) comments.toggle(t, expandAll.value);
 }
 
 onMounted(async () => {
@@ -92,7 +99,7 @@ onMounted(async () => {
       <div class="mx-auto flex max-w-2xl items-center justify-between gap-4 px-4 py-2 text-sm">
         <span class="inline-flex items-center gap-1.5"><MessageCircle class="size-4 text-muted-foreground" aria-hidden="true" /><b class="text-lg text-primary">{{ total }}</b> 件のコメント</span>
         <Button variant="outline" class="min-h-11 rounded-full text-xs" @click="toggleAll">
-          {{ allOpen ? "全部とじる" : "コメントを全部ひらく" }}
+          {{ expandAll ? "コメントを全部とじる" : "コメントを全部ひらく" }}
         </Button>
       </div>
     </div>
