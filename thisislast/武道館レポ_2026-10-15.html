@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>This is LAST 日本武道館 "通過点" レポ｜2026.10.15</title>
+<meta name="description" content="This is LAST 初の日本武道館単独公演 &quot;通過点&quot;（2026年10月15日）のセトリと MC の流れまとめ。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Shippori+Mincho:wght@600;800&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0f17;
+    --ink-2: #151827;
+    --line: #2a2e44;
+    --text: #e9e6df;
+    --muted: #9a98a6;
+    --amber: #f4c06a;
+    --amber-soft: rgba(244, 192, 106, .14);
+    --rose: #f08aa0;
+    --sky: #8ec5ff;
+    --serif: "Shippori Mincho", serif;
+    --sans: "Zen Kaku Gothic New", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 92svh;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero::before { /* stage spotlight */
+    content: "";
+    position: absolute;
+    inset: -20% -10% auto;
+    height: 120%;
+    background:
+      radial-gradient(ellipse 30% 60% at 50% 0%, rgba(255, 236, 200, .32), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(244, 192, 106, .10), transparent 70%);
+    z-index: -1;
+  }
+  .lights {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(circle, rgba(255, 230, 190, .9) 0 1px, transparent 1.5px);
+    background-size: 46px 46px;
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 55%);
+    opacity: .35;
+  }
+  .hero .date {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    letter-spacing: .2em;
+    color: var(--amber);
+  }
+  .hero h1 {
+    margin: .6rem 0 0;
+    font-family: var(--serif);
+    font-weight: 800;
+    font-size: clamp(2.6rem, 11vw, 6rem);
+    line-height: 1.1;
+    letter-spacing: .04em;
+  }
+  .hero h1 small {
+    display: block;
+    font-family: var(--sans);
+    font-weight: 900;
+    font-size: clamp(.9rem, 3.4vw, 1.2rem);
+    letter-spacing: .5em;
+    margin-bottom: 1rem;
+    color: var(--muted);
+  }
+  .hero .title {
+    margin-top: 1.4rem;
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 6vw, 2.2rem);
+    color: var(--amber);
+    text-shadow: 0 0 24px rgba(244, 192, 106, .45);
+  }
+  .hero .lead {
+    margin: 2rem auto 0;
+    max-width: 30rem;
+    color: var(--muted);
+    font-size: .95rem;
+  }
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 2.4rem;
+    margin-top: 2.4rem;
+  }
+  .stats b {
+    display: block;
+    font-family: var(--serif);
+    font-size: 2rem;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stats span { font-size: .75rem; color: var(--muted); letter-spacing: .15em; }
+  .scroll-hint {
+    position: absolute;
+    bottom: 1.6rem;
+    left: 50%;
+    translate: -50% 0;
+    font-size: .7rem;
+    letter-spacing: .3em;
+    color: var(--muted);
+  }
+
+  /* ---------- quick setlist ---------- */
+  main { max-width: 44rem; margin: 0 auto; padding: 0 1.25rem 6rem; }
+  section { margin-top: 5rem; }
+  h2 {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    margin: 0 0 1.5rem;
+    display: flex;
+    align-items: baseline;
+    gap: .8rem;
+  }
+  h2 .en {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--amber);
+    letter-spacing: .15em;
+  }
+  .quick {
+    list-style: none;
+    padding: 1.4rem 1.6rem;
+    margin: 0;
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    columns: 2;
+    column-gap: 2rem;
+    font-size: .92rem;
+  }
+  .quick li { break-inside: avoid; padding: .15rem 0; }
+  .quick a { color: inherit; text-decoration: none; }
+  .quick a:hover { color: var(--amber); }
+  .quick .n {
+    display: inline-block;
+    width: 2.2em;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .quick .mc-mark { color: var(--amber); font-size: .75rem; margin-left: .3rem; }
+  @media (max-width: 480px) { .quick { columns: 1; } }
+
+  /* ---------- timeline ---------- */
+  .timeline { position: relative; padding-left: 1.6rem; }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: .45rem;
+    top: .5rem;
+    bottom: .5rem;
+    width: 2px;
+    background: linear-gradient(var(--amber), var(--rose) 50%, var(--sky));
+    opacity: .5;
+    border-radius: 2px;
+  }
+  .block-label {
+    position: relative;
+    margin: 3rem 0 1rem;
+    font-size: .75rem;
+    letter-spacing: .3em;
+    color: var(--muted);
+  }
+  .block-label:first-child { margin-top: 0; }
+
+  .song {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.6rem 1fr;
+    align-items: start;
+    padding: .7rem 0;
+    scroll-margin-top: 1rem;
+  }
+  .song::before { /* dot on the line */
+    content: "";
+    position: absolute;
+    left: calc(-1.6rem + .45rem - 4px);
+    top: 1.3rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: 2px solid var(--amber);
+  }
+  .song .no {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    padding-top: .15rem;
+  }
+  .song .name {
+    font-family: var(--serif);
+    font-weight: 800;
+    font-size: 1.3rem;
+    line-height: 1.5;
+  }
+  .song ul {
+    margin: .4rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: .92rem;
+    color: #cfcbc2;
+  }
+  .song li {
+    position: relative;
+    padding-left: 1.1rem;
+    margin-top: .25rem;
+  }
+  .song li::before { content: "✦"; position: absolute; left: 0; color: var(--amber); font-size: .7rem; top: .3rem; }
+  .tag {
+    display: inline-block;
+    margin-left: .5rem;
+    padding: .05rem .55rem;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: .68rem;
+    vertical-align: .25rem;
+    background: var(--rose);
+    color: var(--ink);
+  }
+  .tag.secret { background: var(--amber); }
+
+  .mc {
+    position: relative;
+    margin: 1.4rem 0 1.6rem;
+    padding: 1.4rem 1.4rem 1.2rem;
+    background: linear-gradient(160deg, var(--amber-soft), rgba(240, 138, 160, .06));
+    border: 1px solid rgba(244, 192, 106, .35);
+    border-radius: 18px;
+  }
+  .mc::before {
+    content: "";
+    position: absolute;
+    left: calc(-1.6rem + .45rem - 7px);
+    top: 1.6rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 18px var(--amber);
+  }
+  .mc h3 {
+    margin: 0 0 .9rem;
+    font-size: .8rem;
+    letter-spacing: .25em;
+    color: var(--amber);
+  }
+  .mc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: talk;
+  }
+  .mc li {
+    counter-increment: talk;
+    position: relative;
+    padding: .55rem 0 .55rem 2.2rem;
+    border-top: 1px dashed rgba(244, 192, 106, .2);
+    font-size: .95rem;
+  }
+  .mc li:first-child { border-top: 0; }
+  .mc li::before {
+    content: counter(talk);
+    position: absolute;
+    left: 0;
+    top: .65rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--amber);
+  }
+  .mc li.to-song { color: var(--amber); font-weight: 700; }
+  .mc li.to-song::before { content: "♪"; }
+  .mc .sub { display: block; margin-top: .2rem; color: var(--muted); font-size: .85rem; }
+  .quote {
+    display: block;
+    margin: .5rem 0 .2rem;
+    padding: .7rem 1rem;
+    border-left: 3px solid var(--amber);
+    background: rgba(13, 15, 23, .5);
+    border-radius: 0 10px 10px 0;
+    font-family: var(--serif);
+    font-size: 1.02rem;
+    line-height: 1.7;
+  }
+  .quote .who { font-family: var(--sans); font-size: .72rem; color: var(--amber); display: block; margin-bottom: .15rem; letter-spacing: .1em; }
+
+  .news {
+    display: grid;
+    gap: .8rem;
+    margin-top: .3rem;
+  }
+  .news-card {
+    padding: .9rem 1.1rem;
+    border-radius: 12px;
+    background: rgba(13, 15, 23, .6);
+    border: 1px solid var(--line);
+  }
+  .news-card b { color: var(--amber); font-size: .72rem; letter-spacing: .2em; display: block; }
+  .news-card strong { font-family: var(--serif); font-size: 1.1rem; }
+
+  .encore-label {
+    margin: 3.5rem 0 1rem;
+    text-align: center;
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 1.6rem;
+    color: var(--rose);
+    letter-spacing: .2em;
+  }
+  .song.en::before { border-color: var(--rose); }
+  .song.en .no { color: var(--rose); font-size: .9rem; }
+
+  footer {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: .78rem;
+    color: var(--muted);
+  }
+  footer .thanks {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 2rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  footer a { color: var(--muted); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .song, .mc { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+    @keyframes rise { from { opacity: 0; translate: 0 18px; } to { opacity: 1; translate: 0 0; } }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="lights" aria-hidden="true"></div>
+  <div>
+    <div class="date">2026.10.15 THU</div>
+    <h1><small>THIS IS LAST</small>日本武道館</h1>
+    <div class="title">"通過点"</div>
+    <p class="lead">初の日本武道館単独公演。<br>セトリと、どこでどんな MC があったかを、覚えている範囲でまとめました。</p>
+    <div class="stats">
+      <div><b>19</b><span>本編</span></div>
+      <div><b>2</b><span>アンコール</span></div>
+      <div><b>3</b><span>MC</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true">SCROLL</div>
+</header>
+
+<main>
+
+  <section>
+    <h2>セトリ <span class="en">Setlist</span></h2>
+    <ol class="quick">
+      <li><a href="#s1"><span class="n">01</span>恋愛凡人は踊らない</a></li>
+      <li><a href="#s2"><span class="n">02</span>もういいの？</a></li>
+      <li><a href="#s3"><span class="n">03</span>沼超えて湖</a></li>
+      <li><a href="#s4"><span class="n">04</span>火の花</a></li>
+      <li><a href="#s5"><span class="n">05</span>ベイビー</a></li>
+      <li><a href="#s6"><span class="n">06</span>Strawberry</a></li>
+      <li><a href="#s7"><span class="n">07</span>結び</a></li>
+      <li><a href="#s8"><span class="n">08</span>アイリス</a></li>
+      <li><a href="#s9"><span class="n">09</span>#情とは</a><span class="mc-mark">● MC</span></li>
+      <li><a href="#s10"><span class="n">10</span>左耳にピアスをしない理由</a></li>
+      <li><a href="#s11"><span class="n">11</span>愛憎</a><span class="mc-mark">● MC</span></li>
+      <li><a href="#s12"><span class="n">12</span>ヨーソロー</a></li>
+      <li><a href="#s13"><span class="n">13</span>向日葵</a></li>
+      <li><a href="#s14"><span class="n">14</span>Any</a></li>
+      <li><a href="#s15"><span class="n">15</span>シェイプシフター</a><span class="mc-mark">● MC</span></li>
+      <li><a href="#s16"><span class="n">16</span>ディアマイ</a></li>
+      <li><a href="#s17"><span class="n">17</span>病んでるくらいがちょうどいいね</a></li>
+      <li><a href="#s18"><span class="n">18</span>カスミソウ</a></li>
+      <li><a href="#s19"><span class="n">19</span>オムライス</a></li>
+      <li><a href="#en1"><span class="n">en1</span>拝啓、最低な君へ</a></li>
+      <li><a href="#en2"><span class="n">en2</span>殺文句</a></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>ライブの流れ <span class="en">Timeline</span></h2>
+
+    <div class="timeline">
+
+      <div class="block-label">BLOCK 1</div>
+      <div class="song" id="s1"><div class="no">01</div><div class="name">恋愛凡人は踊らない</div></div>
+      <div class="song" id="s2"><div class="no">02</div><div>
+        <div class="name">もういいの？</div>
+        <ul>
+          <li>照明がとてもきれいだった</li>
+          <li>YouTube LIVE で話していた話を思い出して泣きそうになった</li>
+        </ul>
+      </div></div>
+      <div class="song" id="s3"><div class="no">03</div><div class="name">沼超えて湖</div></div>
+      <div class="song" id="s4"><div class="no">04</div><div>
+        <div class="name">火の花</div>
+        <ul><li>入る前の照明がすごかった</li></ul>
+      </div></div>
+      <div class="song" id="s5"><div class="no">05</div><div class="name">ベイビー</div></div>
+
+      <div class="block-label">BLOCK 2</div>
+      <div class="song" id="s6"><div class="no">06</div><div class="name">Strawberry</div></div>
+      <div class="song" id="s7"><div class="no">07</div><div class="name">結び</div></div>
+      <div class="song" id="s8"><div class="no">08</div><div class="name">アイリス</div></div>
+      <div class="song" id="s9"><div class="no">09</div><div class="name">#情とは</div></div>
+
+      <div class="mc">
+        <h3>MC ── #情とは のあと</h3>
+        <ol>
+          <li>よっしーこと芳井雅人？ 芳井雅人ことよっしー？ のくだり</li>
+          <li>てるくん: キッチンカーとフォトスポットのくだり</li>
+          <li>あきくん: 武道館グッズのガチャガチャに変装して行ったくだり
+            <span class="sub">狙っていたおばけのキーホルダーが一発で出た</span></li>
+          <li>結成してからのお話</li>
+          <li>次はメタルコアバンドを目指そう！ と話が進んでいた頃、当時付き合っていた彼女に浮気された話
+            <span class="sub">「殺文句」誕生の秘話</span></li>
+          <li>
+            <span class="quote"><span class="who">あきくん</span>「俺が作る曲が、恋愛じゃなくたって同じ思いをしてる人に届いたらいいな。」</span>
+            <span class="sub">浮気でぽっかり空いた穴が埋まったから、この曲は封印していた。でも今日はやるね</span>
+          </li>
+          <li class="to-song">「左耳にピアスをしない理由」誕生秘話 → セトリ解禁</li>
+        </ol>
+      </div>
+
+      <div class="block-label">BLOCK 3</div>
+      <div class="song" id="s10"><div class="no">10</div><div class="name">左耳にピアスをしない理由<span class="tag secret">封印解禁</span></div></div>
+      <div class="song" id="s11"><div class="no">11</div><div class="name">愛憎</div></div>
+
+      <div class="mc">
+        <h3>MC ── 愛憎 のあと｜告知と解禁</h3>
+        <div class="news">
+          <div class="news-card"><b>ANNOUNCE 01</b><strong>来年春 Zepp ツアー開催！</strong>
+            <span class="sub">北海道は2daysじゃなくね？ のくだり</span></div>
+          <div class="news-card"><b>ANNOUNCE 02</b><strong>11/19・11/20 地元・柏でワンマン！</strong></div>
+        </div>
+        <ol style="margin-top:.8rem">
+          <li>昨日から武道館に入って、曲をパツパツにセトリに詰め込んでるよ</li>
+          <li class="to-song">そのまま「ヨーソロー」へ</li>
+        </ol>
+      </div>
+
+      <div class="block-label">BLOCK 4</div>
+      <div class="song" id="s12"><div class="no">12</div><div>
+        <div class="name">ヨーソロー</div>
+        <ul><li>向日葵の前に「何よりも大切な君へ」的なことを言っていた気がする</li></ul>
+      </div></div>
+      <div class="song" id="s13"><div class="no">13</div><div class="name">向日葵</div></div>
+      <div class="song" id="s14"><div class="no">14</div><div>
+        <div class="name">Any</div>
+        <ul><li>スクリーンに歌詞が出ていた</li></ul>
+      </div></div>
+      <div class="song" id="s15"><div class="no">15</div><div>
+        <div class="name">シェイプシフター</div>
+        <ul><li>サビから入った</li></ul>
+      </div></div>
+
+      <div class="mc">
+        <h3>MC ── シェイプシフター のあと</h3>
+        <ol>
+          <li>15歳でギターを始めて〜 のくだり（号泣）
+            <span class="sub">みんなと、仲間と、マネージャーと</span>
+            <span class="sub">カッカッカッ😂 のくだり（マネージャーさんを尊敬してたけど、そんなことなかったって話）</span></li>
+          <li>解散の危機と、ロッキンや CDJ に出たいと夢を語った日々のくだり</li>
+          <li>マネージャーと喧嘩した話
+            <span class="sub">大阪に行かなきゃいけない日に、武道館のことを考えながら曲を書いていたら、間違えて九段下まで来てしまった</span></li>
+          <li>
+            <span class="quote"><span class="who">あきくん</span>「俺みたいなやつが武道館立っていいの？」</span>
+            <span class="quote"><span class="who">マネージャー</span>「立つべき人が立つところだよ」</span>
+          </li>
+          <li><span class="quote"><span class="who">あきくん</span>「人生何があるか分からないよ」</span></li>
+          <li class="to-song">そのまま「ディアマイ」へ</li>
+        </ol>
+      </div>
+
+      <div class="block-label">BLOCK 5</div>
+      <div class="song" id="s16"><div class="no">16</div><div class="name">ディアマイ</div></div>
+      <div class="song" id="s17"><div class="no">17</div><div>
+        <div class="name">病んでるくらいがちょうどいいね</div>
+        <ul><li>手拍子が難しくてできない笑</li></ul>
+      </div></div>
+      <div class="song" id="s18"><div class="no">18</div><div>
+        <div class="name">カスミソウ</div>
+        <ul><li>スクリーンに歌詞が出ていた。大合唱が最高だった</li></ul>
+      </div></div>
+      <div class="song" id="s19"><div class="no">19</div><div class="name">オムライス</div></div>
+
+      <div class="encore-label">— encore —</div>
+      <div class="song en" id="en1"><div class="no">en1</div><div>
+        <div class="name">拝啓、最低な君へ</div>
+        <ul>
+          <li>スライドショーに、誕生日ケーキを持ったあきちゃんが出てきて「かわいい」って声が出た</li>
+          <li>最後の、3人で武道館の前で撮った写真で泣いた</li>
+        </ul>
+      </div></div>
+      <div class="song en" id="en2"><div class="no">en2</div><div class="name">殺文句</div></div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="thanks">Thank you All</div>
+    <p>ファンの記憶をもとにしたまとめです。MC の言葉はニュアンスで、正確な引用ではありません。</p>
+    <p>まとめ: <a href="https://x.com/vexqil_7">@vexqil_7</a></p>
+  </footer>
+
+</main>
+</body>
+</html>

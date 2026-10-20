@@ -1,0 +1,19 @@
+{
+  "name": "setlist-review",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ライブのセトリと MC に、ファン仲間と1項目ずつコメントできる Web アプリ",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler d1 migrations apply DB --local && wrangler dev",
+    "test": "node --test tests/*.test.js",
+    "deploy": "wrangler d1 migrations apply DB --remote && wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.151.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "workerd@1.20261019.1": true
+  }
+}
