@@ -90,3 +90,34 @@ test('HTTP エラーは JevError になる', async () => {
     (error: unknown) => error instanceof JevError && error.status === 401,
   )
 })
+
+test('Cloudflare Workers AI 向けの baseUrl では /ai/run にそのまま投げ、input に包む', async () => {
+  const calls: Array<{ url: string; body: unknown }> = []
+  const fetchLike: FetchLike = async (url, init) => {
+    calls.push({ url, body: JSON.parse(init?.body ?? '{}') })
+    return {
+      status: 200,
+      ok: true,
+      text: JSON.stringify({
+        model: 'jev-1.13.0',
+        answers: { diagrammable: { type: 'noul', noul: 0.9 } },
+        usage: { input_tokens: 10, output_tokens: 0 },
+      }),
+    }
+  }
+
+  const result = await evaluate({
+    fetch: fetchLike,
+    apiKey: 'cf-token',
+    state: 'hello',
+    questions: { diagrammable: { type: 'noul', instructions: 'x' } } as never,
+    baseUrl: 'https://api.cloudflare.com/client/v4/accounts/abc/ai/run',
+  })
+
+  assert.equal(calls[0].url, 'https://api.cloudflare.com/client/v4/accounts/abc/ai/run')
+  assert.deepEqual(calls[0].body, {
+    model: 'typesafe/jev',
+    input: { state: 'hello', questions: { diagrammable: { type: 'noul', instructions: 'x' } } },
+  })
+  assert.equal(result.answers.diagrammable.type, 'noul')
+})

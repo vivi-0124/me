@@ -6,7 +6,7 @@ import { DEFAULT_THRESHOLDS } from './decide.ts'
 import type { Thresholds } from './decide.ts'
 import { DEFAULT_POLICY } from './buffer.ts'
 import type { BufferPolicy } from './buffer.ts'
-import { JEV_BASE_URL, JEV_DEFAULT_MODEL } from './jev.ts'
+import { CLOUDFLARE_DEFAULT_MODEL, JEV_BASE_URL, JEV_DEFAULT_MODEL, isCloudflareBaseUrl } from './jev.ts'
 
 /** 読む環境変数の名前。register.ts がこの順で `$.env.get` する。 */
 export const ENV_KEYS = [
@@ -69,10 +69,14 @@ export function readConfig(env: EnvBag): Config {
           changed: DEFAULT_THRESHOLDS.changed,
         }
 
+  // Cloudflare Workers AI に向いているときは既定のモデル ID もそちらに合わせる。
+  const baseUrl = (env.MERMAID_LIVE_BASE_URL?.trim() || JEV_BASE_URL).replace(/\/+$/, '')
+  const defaultModel = isCloudflareBaseUrl(baseUrl) ? CLOUDFLARE_DEFAULT_MODEL : JEV_DEFAULT_MODEL
+
   return {
     apiKey: apiKey.length > 0 ? apiKey : null,
-    model: env.MERMAID_LIVE_MODEL?.trim() || JEV_DEFAULT_MODEL,
-    baseUrl: env.MERMAID_LIVE_BASE_URL?.trim() || JEV_BASE_URL,
+    model: env.MERMAID_LIVE_MODEL?.trim() || defaultModel,
+    baseUrl,
     dir: env.MERMAID_LIVE_DIR?.trim() || '.claude/mermaid-live',
     port: numberOr(env.MERMAID_LIVE_PORT, 4737),
     autoViewer: truthy(env.MERMAID_LIVE_VIEWER),

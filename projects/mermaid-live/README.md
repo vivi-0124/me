@@ -134,13 +134,31 @@ npm run demo -- answer.md       # 自分の文章で試す
 |---|---|---|
 | `MERMAID_LIVE_API_KEY` / `TYPESAFE_API_KEY` / `TYPESAFE_AI_API_KEY` | なし | Jev のキー。無ければ規則ベース（[料金](docs/pricing.md)） |
 | `MERMAID_LIVE_MODEL` | `jev-latest` | Jev のモデル |
-| `MERMAID_LIVE_BASE_URL` | `https://api.typesafe.ai/v1` | Vercel AI Gateway 等に向けるとき |
+| `MERMAID_LIVE_BASE_URL` | `https://api.typesafe.ai/v1` | Vercel AI Gateway や Cloudflare Workers AI に向けるとき（下記） |
 | `MERMAID_LIVE_DIR` | `.claude/mermaid-live` | `current.mmd` と `state.json` の置き場 |
 | `MERMAID_LIVE_PORT` | `4737` | ビューアのポート |
 | `MERMAID_LIVE_VIEWER` | なし | `1` でセッション開始時にビューアを自動起動 |
 | `MERMAID_LIVE_MIN_GROWTH` | `240` | 前回の判定から何文字増えたら次を聞くか |
 | `MERMAID_LIVE_MIN_INTERVAL_MS` | `1200` | 判定の最短間隔 |
 | `MERMAID_LIVE_THRESHOLD` | `0.55` | 描き始める確率のつまみ。上げると寡黙に、下げるとお喋りになる |
+
+### Cloudflare Workers AI 経由で使う
+
+TypeSafe のキーが取れない（招待制）場合、同じ Jev が Cloudflare Workers AI にも出ている。
+`MERMAID_LIVE_BASE_URL` が `/ai/run` で終わっていれば Cloudflare 形式で喋る
+（`/systemone` を足さず、`state` と `questions` を `input` に包み、既定のモデル ID を `typesafe/jev` にする）。
+
+```json
+{
+  "env": {
+    "MERMAID_LIVE_BASE_URL": "https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/ai/run",
+    "MERMAID_LIVE_API_KEY": "<Cloudflare API トークン>"
+  }
+}
+```
+
+トークンは `Workers AI: Read` と `Workers AI: Edit` の両方が要る（`/ai/run` は推論の実行なので Read だけでは 403 になる）。ダッシュボードのテンプレート「Workers AI」を選ぶと両方入る。料金は TypeSafe ではなく
+Cloudflare 側の Workers AI の請求になる。
 
 ## 中身
 
