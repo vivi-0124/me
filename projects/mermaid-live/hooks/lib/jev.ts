@@ -150,15 +150,36 @@ export type EvaluateOptions = {
   baseUrl?: string
 }
 
+/**
+ * Cloudflare Workers AI 経由か。baseUrl が `/ai/run` で終わっていればそう見なす。
+ *
+ * Cloudflare も同じ Jev を出しているが、ワイヤの外側だけが違う:
+ *   - パスは `/ai/run` そのもの（`/systemone` を足さない）
+ *   - `state` と `questions` は `input` の中に入る
+ *   - `model` は `typesafe/jev` のような Cloudflare のモデル ID
+ * 返ってくる形（model / answers / usage）は同じなので parseResult は共用できる。
+ */
+export function isCloudflareBaseUrl(baseUrl: string): boolean {
+  return /\/ai\/run$/.test(baseUrl)
+}
+
+export const CLOUDFLARE_DEFAULT_MODEL = 'typesafe/jev'
+
 /** 質問をまとめて 1 往復で評価する。 */
 export async function evaluate(options: EvaluateOptions): Promise<JevResult> {
   const baseUrl = (options.baseUrl ?? JEV_BASE_URL).replace(/\/+$/, '')
-  const url = `${baseUrl}/systemone`
-  const body = JSON.stringify({
-    state: options.state,
-    model: options.model ?? JEV_DEFAULT_MODEL,
-    questions: options.questions,
-  })
+  const cloudflare = isCloudflareBaseUrl(baseUrl)
+  const url = cloudflare ? baseUrl : `${baseUrl}/systemone`
+  const body = cloudflare
+    ? JSON.stringify({
+        model: options.model ?? CLOUDFLARE_DEFAULT_MODEL,
+        input: { state: options.state, questions: options.questions },
+      })
+    : JSON.stringify({
+        state: options.state,
+        model: options.model ?? JEV_DEFAULT_MODEL,
+        questions: options.questions,
+      })
 
   const response = await options.fetch(url, {
     method: 'POST',
