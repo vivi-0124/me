@@ -1,0 +1,22 @@
+{
+  "name": "shorts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "記事をもとにしたショート動画（Remotion + AivisSpeech）",
+  "type": "module",
+  "scripts": {
+    "voice": "node tools/voice.ts",
+    "studio": "remotion studio src/index.ts",
+    "render": "node tools/render.ts"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.536",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.536"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "typescript": "^5.6.0"
+  }
+}
