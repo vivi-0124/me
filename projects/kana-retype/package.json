@@ -21,16 +21,13 @@
       "subtitle": "Kana Retype",
       "description": "選択中のローマ字を、かなキーを押してから同じキーで打ち直す（未確定のまま残る）",
       "mode": "no-view"
-    }
-  ],
-  "preferences": [
+    },
     {
-      "name": "terminalApps",
-      "title": "Terminal Apps",
-      "description": "選択範囲を上書きできないアプリの bundle ID（カンマ区切り）。ここに入れたアプリでは、元の文字を BackSpace で消してから打ち直す。Terminal・iTerm2・Ghostty・Orca などは最初から対象",
-      "type": "textfield",
-      "required": false,
-      "default": ""
+      "name": "manage-terminal-apps",
+      "title": "Manage Terminal Apps",
+      "subtitle": "Kana Retype",
+      "description": "元の文字を BackSpace で消してから打ち直すアプリ（ターミナルなど）を選ぶ",
+      "mode": "view"
     }
   ],
   "dependencies": {

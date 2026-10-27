@@ -30,25 +30,31 @@ konnnitiha を選択 → ショートカット → こんにちは（未確定�
 
 ターミナルの選択は画面の表示を選んでいるだけで、入力欄の編集範囲ではない。そのため打っても選択範囲は置き換わらず、`kakaka` → `kakakaかかか` のように元の文字が残る。
 
-これを避けるため、一番手前のアプリが次のどれかのときは、**カーソルの直前から選択した文字数ぶんを BackSpace で消してから**打ち直す。
+これを避けるため、一番手前のアプリが `Manage Terminal Apps` で選んだアプリのときは、**カーソルの直前から選択した文字数ぶんを BackSpace で消してから**打ち直す。
 
-- Terminal / iTerm2 / Ghostty / WezTerm / Alacritty / kitty / Warp / Hyper / Tabby / Orca
+一度も保存していないときは、次のアプリが対象になっている。
+
+- Terminal / iTerm2 / Ghostty / WezTerm / Alacritty / kitty / Warp / Hyper / Tabby / Orca / VS Code
 
 注意点:
 
 - 消すのは「カーソルの直前の N 文字」。打った直後（カーソルが末尾にある状態）で使う前提
-- リストにないターミナルは、設定の **Terminal Apps** に bundle ID を追加する
 
 ### VS Code
 
-VS Code はエディタと統合ターミナルを見分けられないので、**先に → を送ってから** BackSpace で文字数ぶん消す。
+VS Code（と Cursor・VS Code Insiders・VSCodium・Windsurf）はエディタと統合ターミナルを見分けられないので、**先に → を送ってから** BackSpace で文字数ぶん消す。
 
 - エディタ: → で選択が解除され、カーソルが選択範囲の末尾へ移る。そこから文字数ぶん消すので、ちょうど選択範囲が消える
 - 統合ターミナル: カーソルは打った文字の末尾にあるので → は何もしない
 
-## 設定 (Preferences)
+## 対象アプリの選び方（Manage Terminal Apps）
 
-- **Terminal Apps**: BackSpace で消してから打ち直すアプリの bundle ID をカンマ区切りで追加する。bundle ID は `osascript -e 'id of app "アプリ名"'` で調べられる
+1. Raycast で `Manage Terminal Apps` を開く
+2. 「対象のアプリ」でアプリを複数選ぶ（インストール済みのアプリがアイコン付きで出る。名前で絞り込める）
+3. `Enter`（Save）で保存する
+
+- `Cmd+Shift+R`（Reset to Defaults）で、最初の一覧に戻せる
+- 保存先は拡張機能の LocalStorage。未インストールのアプリで保存済みのものは、一覧に出ないが消さずに残す
 
 ## 前提
 

@@ -1,11 +1,23 @@
+import { LocalStorage } from "@raycast/api";
+
 // 元の文字の消し方
 // - overwrite: 何もしない。打ったキーで選択範囲が置き換わる（普通のテキスト欄）
 // - backspace: カーソルの直前を文字数ぶん BackSpace で消す（ターミナル）
 // - collapseThenBackspace: → で選択を解除して末尾へ移ってから、文字数ぶん消す（エディタとターミナルが同居するアプリ）
 export type DeleteMode = "overwrite" | "backspace" | "collapseThenBackspace";
 
-// 選択範囲を打って上書きできないアプリ（ターミナルと、ターミナルを内蔵したアプリ）
-const TERMINAL_BUNDLE_IDS = [
+// エディタと統合ターミナルを見分けられないアプリ（VS Code と、その派生）。
+// エディタでは → で選択が末尾に畳まれ、ターミナルではカーソルが末尾にあるので → は何もしない
+const MIXED_BUNDLE_IDS = [
+  "com.microsoft.VSCode",
+  "com.microsoft.VSCodeInsiders",
+  "com.vscodium",
+  "com.todesktop.230313mxl3q", // Cursor
+  "com.exafunction.windsurf",
+];
+
+// 一度も保存していないときに対象にするアプリ
+export const DEFAULT_TERMINAL_BUNDLE_IDS = [
   "com.apple.Terminal",
   "com.googlecode.iterm2",
   "com.mitchellh.ghostty",
@@ -16,20 +28,29 @@ const TERMINAL_BUNDLE_IDS = [
   "co.zeit.hyper",
   "org.tabby",
   "com.stablyai.orca",
+  "com.microsoft.VSCode",
 ];
 
-// エディタと統合ターミナルを見分けられないアプリ。
-// エディタでは → で選択が末尾に畳まれ、ターミナルではカーソルが末尾にあるので → は何もしない
-const MIXED_BUNDLE_IDS = ["com.microsoft.VSCode"];
+const STORAGE_KEY = "terminalBundleIds";
 
-/** カンマ・空白・改行区切りの bundle ID を配列にする */
-export function parseBundleIds(value: string | undefined): string[] {
-  return (value ?? "").split(/[\s,]+/).filter((id) => id !== "");
+/** 元の文字を消してから打ち直すアプリの bundle ID。未保存なら既定の一覧 */
+export async function loadTerminalBundleIds(): Promise<string[]> {
+  const raw = await LocalStorage.getItem<string>(STORAGE_KEY);
+  if (raw === undefined) return DEFAULT_TERMINAL_BUNDLE_IDS;
+  try {
+    const ids: unknown = JSON.parse(raw);
+    if (Array.isArray(ids)) return ids.filter((id): id is string => typeof id === "string");
+  } catch {
+    // 壊れていたら既定に戻す
+  }
+  return DEFAULT_TERMINAL_BUNDLE_IDS;
 }
 
-export function deleteModeFor(bundleId: string | undefined, extraTerminalBundleIds: string[] = []): DeleteMode {
-  if (!bundleId) return "overwrite";
-  if (MIXED_BUNDLE_IDS.includes(bundleId)) return "collapseThenBackspace";
-  if ([...TERMINAL_BUNDLE_IDS, ...extraTerminalBundleIds].includes(bundleId)) return "backspace";
-  return "overwrite";
+export async function saveTerminalBundleIds(ids: string[]): Promise<void> {
+  await LocalStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+}
+
+export function deleteModeFor(bundleId: string | undefined, terminalBundleIds: string[]): DeleteMode {
+  if (!bundleId || !terminalBundleIds.includes(bundleId)) return "overwrite";
+  return MIXED_BUNDLE_IDS.includes(bundleId) ? "collapseThenBackspace" : "backspace";
 }
