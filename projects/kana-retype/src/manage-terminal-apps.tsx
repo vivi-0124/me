@@ -22,12 +22,14 @@ export default function Command() {
   const { data: saved = [], isLoading: loadingSaved } = usePromise(loadTerminalBundleIds, [], { onData: setSelected });
 
   const installed = new Set(apps.map((app) => app.bundleId));
+  // 一覧に無い（未インストールの）アプリは bundle ID のままタグに出てしまうので、画面には出さない
+  const visible = selected.filter((id) => installed.has(id));
 
   async function save() {
     // 未インストールのアプリは一覧に出ないので、保存済みのものは消さずに残す
     const hidden = saved.filter((id) => !installed.has(id));
-    await saveTerminalBundleIds([...new Set([...selected, ...hidden])]);
-    await showToast({ style: Toast.Style.Success, title: "保存しました", message: `${selected.length} 個のアプリ` });
+    await saveTerminalBundleIds([...new Set([...visible, ...hidden])]);
+    await showToast({ style: Toast.Style.Success, title: "保存しました", message: `${visible.length} 個のアプリ` });
   }
 
   return (
@@ -46,7 +48,7 @@ export default function Command() {
       }
     >
       <Form.Description text="ここで選んだアプリでは、元の文字を BackSpace で消してから打ち直します。ターミナルなど、選択範囲を打っても上書きできないアプリを選んでください。" />
-      <Form.TagPicker id="bundleIds" title="対象のアプリ" value={selected} onChange={setSelected}>
+      <Form.TagPicker id="bundleIds" title="対象のアプリ" value={visible} onChange={setSelected}>
         {apps.map((app) => (
           <Form.TagPicker.Item key={app.bundleId} value={app.bundleId} title={app.name} icon={{ fileIcon: app.path }} />
         ))}
