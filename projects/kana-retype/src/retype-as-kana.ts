@@ -1,6 +1,7 @@
-import { closeMainWindow, getSelectedText, showHUD } from "@raycast/api";
+import { closeMainWindow, getFrontmostApplication, getPreferenceValues, getSelectedText, showHUD } from "@raycast/api";
 import { runAppleScript } from "@raycast/utils";
 import { buildRetypeScript, findUntypableChars } from "./lib/keys";
+import { isTerminalApp, parseBundleIds } from "./lib/terminal";
 
 async function readSelection(): Promise<string> {
   try {
@@ -8,6 +9,14 @@ async function readSelection(): Promise<string> {
   } catch {
     // 選択が無いと getSelectedText は例外を投げる
     return "";
+  }
+}
+
+async function readFrontmostBundleId(): Promise<string | undefined> {
+  try {
+    return (await getFrontmostApplication()).bundleId;
+  } catch {
+    return undefined;
   }
 }
 
@@ -26,8 +35,11 @@ export default async function Command() {
     return;
   }
 
+  const { terminalApps } = getPreferenceValues<Preferences>();
+  const deleteBefore = isTerminalApp(await readFrontmostBundleId(), parseBundleIds(terminalApps));
+
   try {
-    await runAppleScript(buildRetypeScript(text));
+    await runAppleScript(buildRetypeScript(text, { deleteBefore }));
   } catch (error) {
     console.error(error);
     await showHUD(

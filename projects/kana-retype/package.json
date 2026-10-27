@@ -23,6 +23,16 @@
       "mode": "no-view"
     }
   ],
+  "preferences": [
+    {
+      "name": "terminalApps",
+      "title": "Terminal Apps",
+      "description": "選択範囲を上書きできないアプリの bundle ID（カンマ区切り）。ここに入れたアプリでは、元の文字を BackSpace で消してから打ち直す。Terminal・iTerm2・Ghostty・Orca などは最初から対象",
+      "type": "textfield",
+      "required": false,
+      "default": ""
+    }
+  ],
   "dependencies": {
     "@raycast/api": "^2.9.0",
     "@raycast/utils": "^2.3.3"
