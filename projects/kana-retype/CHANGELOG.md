@@ -1,5 +1,11 @@
 # Kana Retype Changelog
 
+## [対象アプリを一覧から選べるようにした] - 2026-10-27
+
+- `Manage Terminal Apps` コマンドを追加した。インストール済みのアプリをアイコン付きで複数選択して、元の文字を消してから打ち直すアプリを決められる
+- 設定画面で bundle ID を打つ Terminal Apps 欄は廃止した
+- Cursor・VS Code Insiders・VSCodium・Windsurf も、選べば VS Code と同じ消し方（→ のあと BackSpace）にした
+
 ## [VS Code に対応] - 2026-10-27
 
 - VS Code では → で選択を末尾に畳んでから、文字数ぶん BackSpace で消して打ち直すようにした。エディタと統合ターミナルのどちらでも元の文字が残らない
