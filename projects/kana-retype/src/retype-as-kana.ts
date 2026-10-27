@@ -1,7 +1,7 @@
 import { closeMainWindow, getFrontmostApplication, getPreferenceValues, getSelectedText, showHUD } from "@raycast/api";
 import { runAppleScript } from "@raycast/utils";
 import { buildRetypeScript, findUntypableChars } from "./lib/keys";
-import { isTerminalApp, parseBundleIds } from "./lib/terminal";
+import { deleteModeFor, parseBundleIds } from "./lib/terminal";
 
 async function readSelection(): Promise<string> {
   try {
@@ -36,10 +36,10 @@ export default async function Command() {
   }
 
   const { terminalApps } = getPreferenceValues<Preferences>();
-  const deleteBefore = isTerminalApp(await readFrontmostBundleId(), parseBundleIds(terminalApps));
+  const deleteMode = deleteModeFor(await readFrontmostBundleId(), parseBundleIds(terminalApps));
 
   try {
-    await runAppleScript(buildRetypeScript(text, { deleteBefore }));
+    await runAppleScript(buildRetypeScript(text, deleteMode));
   } catch (error) {
     console.error(error);
     await showHUD(
