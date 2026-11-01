@@ -1,0 +1,36 @@
+{
+  "name": "void-vue",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vp dev",
+    "build": "vp build",
+    "preview": "vp preview",
+    "postinstall": "void prepare"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@void/vue": "1.4.0",
+    "typescript": "^7.0.2",
+    "vite": "npm:@voidzero-dev/vite-plus-core@^1.3.0",
+    "vite-plus": "^1.3.0",
+    "void": "^1.4.0"
+  },
+  "allowScripts": {
+    "esbuild@0.18.20": true,
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true,
+    "workerd@1.20261023.1": true,
+    "workerd@1.20261012.1": true,
+    "better-sqlite3@13.0.3": true,
+    "fsevents@2.3.3": true
+  },
+  "private": true,
+  "dependencies": {
+    "hono": "^4.11.9",
+    "vue": "^3.5.30",
+    "zod": "^4.6.7"
+  },
+  "overrides": {
+    "vite": "$vite"
+  }
+}
