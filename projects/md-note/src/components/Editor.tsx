@@ -238,8 +238,7 @@ export default function Editor({ initialPath, startNew }: Props) {
     >
       <Form.TextField
         id="name"
-        title="ファイル名"
-        placeholder={newNoteName()}
+        placeholder={`ファイル名（例: ${newNoteName()}）`}
         info="フォーカスを外すと名前が変わります（.md は付けない）"
         value={name}
         onChange={onNameChange}
@@ -247,7 +246,6 @@ export default function Editor({ initialPath, startNew }: Props) {
       />
       <Form.TextArea
         id="body"
-        title="本文"
         placeholder="Markdown で書く（⌘↵ でプレビュー）"
         enableMarkdown
         autoFocus
