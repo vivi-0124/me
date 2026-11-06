@@ -21,13 +21,6 @@
       "subtitle": "Kana Retype",
       "description": "選択中のローマ字を、かなキーを押してから同じキーで打ち直す（未確定のまま残る）",
       "mode": "no-view"
-    },
-    {
-      "name": "manage-terminal-apps",
-      "title": "Manage Terminal Apps",
-      "subtitle": "Kana Retype",
-      "description": "元の文字を BackSpace で消してから打ち直すアプリ（ターミナルなど）を選ぶ",
-      "mode": "view"
     }
   ],
   "dependencies": {
