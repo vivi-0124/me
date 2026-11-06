@@ -1,6 +1,8 @@
 // AivisSpeech Engine（http://127.0.0.1:10101）でシーンごとのナレーションを生成し、長さを durations.json に書き出す
 // 先にエンジンを起動しておく: ~/Applications/AivisSpeech-Engine/run
 // 使い方: node tools/voice.ts <動画ID>（例: https443）
+// VOICEVOX のずんだもんで作る場合: ~/Applications/VOICEVOX-Engine/run を起動して
+//   ENGINE=http://127.0.0.1:50021 SPEAKER=3 node tools/voice.ts kanaretype
 import { execFileSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 import type { Scene } from "../src/scene.ts";
