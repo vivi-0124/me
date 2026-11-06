@@ -15,6 +15,8 @@ export type Video = {
   visuals: Record<string, () => ReactNode>;
   // 縦に長い素材（スマホ画面の録画など）を置くシーン。絵の領域を下に広げ、字幕を下へずらす
   tallScenes?: string[];
+  // 音声ソフトの利用規約で求められるクレジット（例: "VOICEVOX:ずんだもん"）
+  credit?: string;
 };
 
 export const sceneFrames = (video: Video) => video.scenes.map((s) => Math.ceil((video.durations[s.id] + PAD) * FPS));
@@ -66,6 +68,9 @@ export const Short = ({ video }: { video: Video }) => {
           </Sequence>
         );
       })}
+      {video.credit && (
+        <div style={{ position: "absolute", bottom: 40, right: 50, fontSize: 30, color: C.sub, fontWeight: 700 }}>{video.credit}</div>
+      )}
     </AbsoluteFill>
   );
 };

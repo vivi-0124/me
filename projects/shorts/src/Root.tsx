@@ -1,5 +1,6 @@
 import { Composition } from "remotion";
 import { FPS, Short, type Video, totalFrames } from "./Short";
+import { kanaretype } from "./videos/kanaretype/Visuals";
 import { https443 } from "./videos/https443/Visuals";
 import { livecal } from "./videos/livecal/Visuals";
 import { orca } from "./videos/orca/Visuals";
@@ -7,7 +8,7 @@ import { port } from "./videos/port/Visuals";
 import { portforward } from "./videos/portforward/Visuals";
 import { tcpip } from "./videos/tcpip/Visuals";
 
-const videos = [tcpip, port, https443, portforward, orca, livecal];
+const videos = [tcpip, port, https443, portforward, orca, livecal, kanaretype];
 
 // defaultProps は JSON にシリアライズされ関数や JSX が落ちるので、動画ごとにラッパーを作って渡す
 const withVideo = (video: Video) => () => <Short video={video} />;
