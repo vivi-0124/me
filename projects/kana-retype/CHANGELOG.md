@@ -1,4 +1,9 @@
-# Kana Retype Changelog
+# Romaji to Kana Changelog
+
+## [公開版にそろえた] - 2026-11-07
+
+- 名前を `Kana Retype` から `Romaji to Kana` に変えた（Store では新しい拡張機能になる）
+- 説明文、README、デモ GIF を公開版と同じにした
 
 ## [公開版の修正を反映] - 2026-11-07
 

@@ -1,29 +1,25 @@
-# Chrome Tab Search
+# Chrome Tab Switcher
 
-Chrome で開いているタブを、ウィンドウをまたいで検索して切り替える Raycast 拡張機能。
+A fast Raycast extension to search and switch Google Chrome tabs across all open windows.
 
-## 使い方
+![Search for raycast, choose a tab from another window with the arrow keys, and press Return to switch to it](media/chrome-tab-switcher-demo.gif)
 
-1. Raycast で `Search Chrome Tabs` を実行する
-2. 文字を打って絞り込む（タイトルと URL の部分一致。スペース区切りで AND 検索）
-3. `↵` でそのタブに切り替える
+## Features
 
-ホットキーを割り当てると、すぐに呼び出せる。
+- **Cross-Window Tab Search**: Quickly find any open Chrome tab across multiple windows.
+- **Instant Switch**: Hit `↵` (Enter) to bring the tab and its window directly into focus.
+- **Fast & Lightweight**: Built using macOS JavaScript for Automation (JXA) with optimized batch queries.
+- **Search Filtering**: Filter by title or URL with space-separated keywords.
 
-## 権限
+## How to Use
 
-初回実行時に「Raycast が Google Chrome を制御」する許可を求められるので、許可する。拒否した場合は、システム設定 → プライバシーとセキュリティ → オートメーション で Raycast の Google Chrome をオンにする。
+1. Run the `Search Chrome Tabs` command in Raycast (assigning a hotkey is recommended).
+2. Type to filter open tabs by title or URL.
+3. Use `↑` / `↓` to choose a tab, then press `↵` (Enter) to switch to it.
 
-## 開発
+## Permissions
 
-```bash
-npm install
-npm run dev
-npm run lint
-npm run build
-```
-
-| パス                  | 役割                                       |
-| --------------------- | ------------------------------------------ |
-| `src/search-tabs.tsx` | コマンドの画面（一覧・絞り込み・切り替え） |
-| `src/lib/chrome.ts`   | JXA による Chrome のタブ取得と切り替え     |
+On first run, macOS will prompt you to allow Raycast to control Google Chrome.
+If you accidentally denied permission:
+1. Open **System Settings -> Privacy & Security -> Automation**.
+2. Enable **Google Chrome** under **Raycast**.

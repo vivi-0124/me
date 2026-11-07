@@ -1,4 +1,10 @@
-# Chrome Tab Search Changelog
+# Chrome Tab Switcher Changelog
+
+## [公開版にそろえた] - 2026-11-07
+
+- 名前を `Chrome Tab Search` から `Chrome Tab Switcher` に変えた（Store では新しい拡張機能になる）
+- 説明文、README、スクリーンショット、デモ GIF を公開版と同じにした
+- ウィンドウの読み取りエラーや検索結果 0 件の表示など、公開版の最新の修正を反映した
 
 ## [公開版の修正を反映] - 2026-11-07
 
