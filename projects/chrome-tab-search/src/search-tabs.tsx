@@ -12,16 +12,14 @@ function hostname(url: string) {
 }
 
 export default function Command() {
-  const {
-    data: tabs = [],
-    isLoading,
-    revalidate,
-  } = useCachedPromise(listTabs, [], {
-    failureToastOptions: { title: "タブを取得できませんでした" },
+  const { data, isLoading, error, revalidate } = useCachedPromise(listTabs, [], {
+    failureToastOptions: { title: "Failed to load tabs" },
   });
+  const tabs = data?.tabs ?? [];
+  const skippedWindowCount = data?.skippedWindowCount ?? 0;
   const [query, setQuery] = useState("");
 
-  // 日本語は単語に区切れないので、タイトルと URL の部分一致で絞り込む
+  // Filter by matching title and url across space-separated query words
   const words = query.toLowerCase().split(/\s+/).filter(Boolean);
   const visible = tabs.filter((tab) => {
     const haystack = `${tab.title}\n${tab.url}`.toLowerCase();
@@ -34,33 +32,55 @@ export default function Command() {
       await closeMainWindow();
       await popToRoot({ clearSearchBar: true });
     } catch (error) {
-      await showFailureToast(error, { title: "タブを開けませんでした" });
+      await showFailureToast(error, { title: "Failed to switch tab" });
       revalidate();
     }
   }
 
+  const retryAction = <Action title="Retry" icon={Icon.ArrowClockwise} onAction={revalidate} />;
+  const skippedTitle = "Some Tabs Could Not Be Loaded";
+  const skippedDetail = `${skippedWindowCount} ${skippedWindowCount === 1 ? "window" : "windows"} changed while loading`;
+
   return (
-    <List isLoading={isLoading} filtering={false} onSearchTextChange={setQuery} searchBarPlaceholder="タブを検索">
-      {!isLoading && (
+    <List isLoading={isLoading} filtering={false} onSearchTextChange={setQuery} searchBarPlaceholder="Search tabs...">
+      {!isLoading && error && tabs.length === 0 ? (
         <List.EmptyView
-          icon={Icon.MagnifyingGlass}
-          title={tabs.length === 0 ? "開いているタブがありません" : "一致するタブがありません"}
+          icon={Icon.Warning}
+          title="Failed to Load Tabs"
+          description={error.message || "Please check Raycast automation permissions for Google Chrome."}
+          actions={<ActionPanel>{retryAction}</ActionPanel>}
         />
-      )}
-      {visible.map((tab) => (
-        <List.Item
-          key={tab.id}
-          title={tab.title || tab.url}
-          subtitle={hostname(tab.url)}
-          icon={getFavicon(tab.url, { fallback: Icon.Globe })}
-          accessories={[{ text: `ウィンドウ ${tab.windowNumber}` }]}
-          actions={
-            <ActionPanel>
-              <Action title="Switch to Tab" icon={Icon.Switch} onAction={() => onSwitch(tab)} />
-            </ActionPanel>
-          }
+      ) : !isLoading && skippedWindowCount > 0 ? (
+        <List.EmptyView
+          icon={Icon.Warning}
+          title={skippedTitle}
+          description={skippedDetail}
+          actions={<ActionPanel>{retryAction}</ActionPanel>}
         />
-      ))}
+      ) : !isLoading ? (
+        <List.EmptyView icon={Icon.MagnifyingGlass} title={tabs.length === 0 ? "No open tabs" : "No matching tabs"} />
+      ) : null}
+      {/* 警告を選択できる行にすると Enter がタブ切り替えではなく Retry になるので、Section の見出しに出す */}
+      <List.Section
+        title={skippedWindowCount > 0 ? skippedTitle : undefined}
+        subtitle={skippedWindowCount > 0 ? `${skippedDetail} · ⌘↵ to retry` : undefined}
+      >
+        {visible.map((tab) => (
+          <List.Item
+            key={tab.id}
+            title={tab.title || tab.url}
+            subtitle={hostname(tab.url)}
+            icon={getFavicon(tab.url, { fallback: Icon.Globe })}
+            accessories={[{ text: `Window ${tab.windowNumber}` }]}
+            actions={
+              <ActionPanel>
+                <Action title="Switch to Tab" icon={Icon.Switch} onAction={() => onSwitch(tab)} />
+                {retryAction}
+              </ActionPanel>
+            }
+          />
+        ))}
+      </List.Section>
     </List>
   );
 }
