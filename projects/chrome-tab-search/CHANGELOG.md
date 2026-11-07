@@ -1,5 +1,9 @@
 # Chrome Tab Switcher Changelog
 
+## [デモ GIF をズーム版に更新] - 2026-11-07
+
+- README のデモ GIF を、ズームを入れたものに差し替えた
+
 ## [公開版にそろえた] - 2026-11-07
 
 - 名前を `Chrome Tab Search` から `Chrome Tab Switcher` に変えた（Store では新しい拡張機能になる）
