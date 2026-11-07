@@ -1,8 +1,9 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "chrome-tab-search",
-  "title": "Chrome Tab Search",
-  "description": "Chrome のタブをウィンドウ横断で検索して切り替える",
+  "name": "chrome-tab-switcher",
+  "title": "Chrome Tab Switcher",
+  "type": "module",
+  "description": "Search and switch tabs across all Google Chrome windows with ease",
   "icon": "extension-icon.png",
   "author": "vivi-0124",
   "owner": "vivi-1610",
@@ -18,8 +19,7 @@
     {
       "name": "search-tabs",
       "title": "Search Chrome Tabs",
-      "subtitle": "Chrome Tab Search",
-      "description": "開いているタブをウィンドウ横断で検索して切り替える",
+      "description": "Search open tabs across all Chrome windows and switch to them",
       "mode": "view"
     }
   ],

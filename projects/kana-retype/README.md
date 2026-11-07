@@ -1,54 +1,40 @@
-# Kana Retype
+# Romaji to Kana
 
-英数モードのまま打ってしまったローマ字を、消さずに かなモードで打ち直す拡張機能。
+A Raycast extension to retype accidentally typed romaji text into Japanese Kana without deleting it.
 
-```
-konnnitiha を選択 → ショートカット → こんにちは（未確定。スペースで漢字に変換できる）
-```
+![Type nihongo, select it, and press a hotkey to retype it as 日本語, then press Return to confirm](media/romaji-to-kana-demo.gif)
 
-## 使い方
+## Requirements & Prerequisites
 
-1. 英数モードで打った文字列を選択する
-2. `Retype Selection as Kana` に割り当てたショートカットを押す
-3. 選択範囲が、かなモードで同じキーを打った結果に置き換わる（未確定のまま）
+> [!IMPORTANT]
+> This extension is specifically designed for **macOS Japanese IME** with an **Apple JIS Keyboard** (featuring the dedicated "Kana" [かな] key, key code 104).
 
-## 動作
+- **Keyboard Layout**: Apple JIS Keyboard with dedicated "Kana" key
+- **Input Source**: macOS default Japanese Input Source (Romaji input)
+- **macOS Permissions**:
+  - **System Settings -> Privacy & Security -> Accessibility** -> Raycast (to send keystrokes and read selected text)
+  - **System Settings -> Privacy & Security -> Automation** -> Raycast -> **System Events**
 
-- `getSelectedText` で選択中の文字列を取る
-- System Events で「かな」キー（key code 104）を送り、かなモードに切り替える
-- 選択中の文字列と同じキーを `keystroke` で送る。最初のキーで選択範囲が上書きされる
-- 空白は Space キー（かなモードでは変換）、改行は Return キー（確定）、タブは Tab キーとして送る
+## How to Use
 
-| 状況                                       | 動作                                         |
-| ------------------------------------------ | -------------------------------------------- |
-| 選択が無い                                 | HUD「文字列を選択してください」を出して終了  |
-| 英数字と記号以外（かな・漢字・全角）を含む | HUD で該当文字を知らせて終了。キーは送らない |
-| System Events を操作できない               | HUD で権限の確認を促す                       |
+1. Select text you accidentally typed in English/Alphanumeric mode (e.g., `nihongo`).
+2. Run the `Retype Selection as Kana` command (assigning a global hotkey is recommended; the demo uses `⌃⇧K`).
+3. The selected text is replaced in Japanese Kana mode, remaining unconfirmed so you can hit Space to convert into Kanji or Return to confirm.
 
-## 前提
+## How It Works
 
-- 入力ソースは macOS 標準の日本語入力（ローマ字入力）
-- JIS キーボード（「かな」キーがある）
-- Raycast に次の 2 つを許可する
-  - システム設定 → プライバシーとセキュリティ → **アクセシビリティ** → Raycast
-  - システム設定 → プライバシーとセキュリティ → **オートメーション** → Raycast → System Events
+- Reads the selected text using Raycast's `getSelectedText()`.
+- Sends the "Kana" key (key code 104) via System Events to switch the input mode to Japanese Kana.
+- Retypes the original keys using `keystroke`. The first keystroke overwrites the selected text.
 
-## 対象外
+| Scenario | Behavior |
+| --- | --- |
+| No text selected | Shows HUD: "Please select text" |
+| Contains whitespace (space, tab, newline) | Shows HUD warning (whitespace triggers IME conversion or focus changes) |
+| Contains non-ASCII characters (full-width, kana, kanji) | Shows HUD warning without sending keystrokes |
+| Permission missing | Shows HUD prompting to check System Settings permissions |
 
-- 選択していない文字列を自動で選択すること
-- 漢字への変換・確定の自動化
-- ターミナル（選択が入力欄の編集範囲ではないので上書きされず、元の文字が残る）
+## Limitations
 
-## 開発
-
-```bash
-npm install
-npm run dev
-npm run lint
-npm run build
-```
-
-| パス                    | 役割                                              |
-| ----------------------- | ------------------------------------------------- |
-| `src/retype-as-kana.ts` | コマンド本体（選択の取得・チェック・キー送信）    |
-| `src/lib/keys.ts`       | 打てない文字の検出と、送るキーの AppleScript 生成 |
+- Only ASCII characters without whitespace are supported for retyping (to avoid triggering IME conversion or focus changes).
+- Terminal emulators that do not overwrite selection on typing are not supported.
